@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "fastify": "^5.2.1",
+    "mercurius": "^16.1.0",
     "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
