@@ -5,12 +5,15 @@ clear();
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path';
 
+import 'dotenv/config';
+const { PORT, CORS_URL } = process.env;
+
 const server: FastifyInstance = Fastify({})
 
 // Configura y registra @fastify/cors
 import cors from '@fastify/cors';
 server.register(cors, {
-  origin: process.env.CORS_URL || '*',
+  origin: CORS_URL || '*',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 });
@@ -30,7 +33,7 @@ server.register(mercurius, {
 import fastifyStatic from '@fastify/static';
 server.register(fastifyStatic, {
   root: path.join(__dirname, "src", 'public'),
-  prefix: '/', 
+  prefix: '/',
 });
 
 // routers
@@ -39,7 +42,7 @@ server.register(healthcheck, { prefix: '/' })
 
 const start = async () => {
   try {
-    await server.listen({ port: 4000 })
+    server.listen({ port: Number(PORT) || 3500 })
     console.log(`Server listening on ${server.server.address()}`)
 
     const address = server.server.address()
