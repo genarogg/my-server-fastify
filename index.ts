@@ -94,6 +94,12 @@ server.register(fastifySwaggerUi, {
   transformStaticCSP: (header) => header
 });
 
+// Configurar metrics
+import fastifyMetrics from 'fastify-metrics';
+server.register(fastifyMetrics, {
+  endpoint: '/metrics'
+});
+
 // graphql
 import mercurius from 'mercurius'
 import { schema, resolvers } from './src/graphql'
@@ -110,8 +116,10 @@ import fastifyStatic from '@fastify/static';
 server.register(fastifyStatic, {
   root: path.join(__dirname, "src", 'public'),
   prefix: '/',
+  cacheControl: true,
+  maxAge: 86400000,
+  etag: true
 });
-
 
 
 // routers
@@ -131,8 +139,9 @@ const start = async () => {
 
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
-      ['Graphql', colors.cyan(`http://localhost:${PORT}/graphiql`)],
-      ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)]
+      ['Graphql', colors.green(`http://localhost:${PORT}/graphiql`)],
+      ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)],
+      ['Metrics', colors.cyan(`http://localhost:${PORT}/metrics`)]
     );
 
     // Imprimir la tabla
