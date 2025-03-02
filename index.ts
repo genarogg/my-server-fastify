@@ -135,9 +135,9 @@ server.register(fastifyView, {
 });
 
 // routers
-import { healthcheck } from "./src/routers"
+import { healthcheck, pdf } from "./src/routers"
 server.register(healthcheck, { prefix: '/' })
-
+server.register(pdf, { prefix: '/pdf' })
 const start = async () => {
   try {
     const port = Number(PORT) || 3500
