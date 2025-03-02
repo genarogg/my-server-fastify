@@ -6,21 +6,9 @@ import { healthcheck } from "./src/routers/index"
 
 server.register(healthcheck, { prefix: '/' })
 
-// Define tu esquema GraphQL
-const schema = `
-  type Query {
-    hello: String
-  }
-`
-
-// Define tus resolvers
-const resolvers = {
-  Query: {
-    hello: async () => 'Hello world!'
-  }
-}
-
 // Registra mercurius en el servidor Fastify
+import { schema, resolvers } from './src/graphql'
+
 server.register(mercurius, {
   schema,
   resolvers,
