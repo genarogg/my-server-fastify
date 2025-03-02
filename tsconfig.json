@@ -10,9 +10,9 @@
       "./node_modules/@types",
       "./src/types"
     ],
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      
+      "@env": ["./env.ts"],
     }
   },
   "include": [
@@ -20,7 +20,7 @@
     "**/**/*.ts",
     "**/**/**/*.ts",
     "src/**/*.tsx"
-, "csv/csvReader.js"  ],
+, "csv/csvReader.js", "prisma/changeProvider.js"  ],
   "exclude": [
     "node_modules",
     "build"
