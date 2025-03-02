@@ -99,6 +99,10 @@ server.register(fastifyMetrics, {
   endpoint: '/metrics'
 });
 
+// db conection
+import dbConection from "./src/config/db-conection";
+let dbStatus: any;
+
 // graphql
 import mercurius from 'mercurius'
 import { schema, resolvers } from './src/graphql'
@@ -126,7 +130,7 @@ server.register(healthcheck, { prefix: '/' })
 const start = async () => {
   try {
     const port = Number(PORT) || 3500
-
+    dbStatus = await dbConection();
     server.listen({ port })
 
     const table = new Table({
@@ -138,7 +142,8 @@ const start = async () => {
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
       ['Graphql', colors.green(`http://localhost:${PORT}/graphiql`)],
       ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)],
-      ['Metrics', colors.cyan(`http://localhost:${PORT}/metrics`)]
+      ['Metrics', colors.cyan(`http://localhost:${PORT}/metrics`)],
+      ["db estatus", colors.cyan(dbStatus)]
     );
 
     // Imprimir la tabla

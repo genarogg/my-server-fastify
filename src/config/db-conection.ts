@@ -6,15 +6,15 @@ const dbConection = async () => {
 
     try {
         await prisma.$connect();
-        log.info("db conectada!");
+        return "db conectada!";
     } catch (error: any) {
         log.error(`Error al conectar a la db: ${error.message}`);
     }
 
     process.on('SIGINT', async () => {
         await prisma.$disconnect();
-        log.info("db desconectada!");
-        process.exit(0);
+
+        return "db desconectada!";
     });
 }
 
