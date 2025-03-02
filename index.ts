@@ -123,6 +123,17 @@ server.register(fastifyStatic, {
   etag: true
 });
 
+import fastifyView from '@fastify/view';
+import ejs from 'ejs';
+
+server.register(fastifyView, {
+  engine: {
+    ejs
+  },
+  root: path.join(__dirname, 'src', 'views'),
+  viewExt: 'ejs',
+});
+
 // routers
 import { healthcheck } from "./src/routers"
 server.register(healthcheck, { prefix: '/' })
