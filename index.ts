@@ -54,7 +54,6 @@ server.register(slowDown, {
   delay: 500
 });
 
-
 // Configurar compresión
 import compress from '@fastify/compress';
 server.register(compress, { global: true });
@@ -110,7 +109,6 @@ server.register(mercurius, {
   graphiql: true
 })
 
-
 // servir archivos estáticos
 import fastifyStatic from '@fastify/static';
 server.register(fastifyStatic, {
@@ -120,7 +118,6 @@ server.register(fastifyStatic, {
   maxAge: 86400000,
   etag: true
 });
-
 
 // routers
 import { healthcheck } from "./src/routers"
