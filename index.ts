@@ -3,8 +3,12 @@ import clear from "console-clear";
 clear();
 
 import Fastify, { FastifyInstance } from 'fastify'
+
+
 import path from 'path';
 import { log } from "@fn"
+import Table from 'cli-table3';
+import colors from "colors";
 
 import 'dotenv/config';
 const { PORT, CORS_URL } = process.env;
@@ -22,7 +26,11 @@ server.register(cors, {
 //configurar helmet
 import helmet from '@fastify/helmet';
 server.register(helmet, {
+  global: true,
   contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: true,
+  frameguard: { action: 'deny' },
+  hidePoweredBy: true,
 });
 
 // Configura  @fastify/rate-limit
@@ -39,6 +47,24 @@ server.register(rateLimit, {
   }
 });
 
+// Configurar slow down
+import slowDown from 'fastify-slow-down';
+server.register(slowDown, {
+  delayAfter: 50,
+  delay: 500
+});
+
+
+// Configurar compresión
+import compress from '@fastify/compress';
+server.register(compress, { global: true });
+
+// Configurar caching
+import fastifyCaching from '@fastify/caching';
+server.register(fastifyCaching, {
+  privacy: fastifyCaching.privacy.PUBLIC,
+  expiresIn: 3600
+});
 
 // Configurar Swagger
 import fastifySwagger from '@fastify/swagger';
@@ -47,11 +73,11 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 server.register(fastifySwagger, {
   swagger: {
     info: {
-      title: 'API Documentation',
-      description: 'API documentation for my project',
+      title: 'API documentacion',
+      description: 'API documentacion for my project',
       version: '1.0.0'
     },
-    host: 'localhost:4000',
+    host: 'localhost:' + Number(PORT),
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json']
@@ -59,7 +85,7 @@ server.register(fastifySwagger, {
 });
 
 server.register(fastifySwaggerUi, {
-  routePrefix: '/documentation',
+  routePrefix: '/documentacion',
   uiConfig: {
     docExpansion: 'full',
     deepLinking: false
@@ -94,12 +120,23 @@ server.register(healthcheck, { prefix: '/' })
 
 const start = async () => {
   try {
-
     const port = Number(PORT) || 3500
 
     server.listen({ port })
-    log.success(`El servidor esta corriendo en http://localhost:${PORT}`);
-    log.info(`Graphql esta corriendo en http://localhost:${PORT}/graphiql`);
+
+    const table = new Table({
+      head: ['Servicio', 'URL'],
+      colWidths: [20, 50]
+    });
+
+    table.push(
+      ['Servidor', colors.green(`http://localhost:${PORT}`)],
+      ['Graphql', colors.cyan(`http://localhost:${PORT}/graphiql`)],
+      ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)]
+    );
+
+    // Imprimir la tabla
+    console.log(table.toString());
   } catch (err) {
     server.log.error(err)
     process.exit(1)
