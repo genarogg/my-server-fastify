@@ -13,6 +13,7 @@
     "baseUrl": "./",
     "paths": {
       "@env": ["./env.ts"],
+      "@fn": ["./src/functions"],
     }
   },
   "include": [
