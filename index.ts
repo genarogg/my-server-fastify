@@ -126,6 +126,7 @@ server.register(next, { dev: process.env.NODE_ENV !== 'production' });
 
 server.after(() => {
   server.next('/hello');
+  server.next('/home');
 });
 
 
