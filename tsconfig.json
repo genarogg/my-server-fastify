@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "jsx": "react",
+    "jsx": "preserve",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
@@ -12,18 +12,37 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@env": ["./env.ts"],
-      "@fn": ["./src/functions"],
-    }
+      "@env": [
+        "./env.ts"
+      ],
+      "@fn": [
+        "./src/functions"
+      ]
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "incremental": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": [
     "*.ts",
     "**/**/*.ts",
     "**/**/**/*.ts",
-    "src/**/*.tsx"
-, "csv/csvReader.js", "prisma/changeProvider.js"  ],
+    "src/**/*.tsx",
+    "csv/csvReader.js",
+    "prisma/changeProvider.js"
+  ],
   "exclude": [
     "node_modules",
-    "build"
+    "build",
+    ".next"
   ]
 }

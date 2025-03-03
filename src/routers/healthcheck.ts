@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 
 const healthcheck = (server: FastifyInstance) => {
     server.get('/', async (request, reply) => {
-        return { healthcheck: 'ok' };
+        return reply.view('healthcheck', { name: 'healthcheck' });
     });
 }
 

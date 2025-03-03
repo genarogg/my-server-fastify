@@ -3,10 +3,7 @@ import clear from "console-clear";
 clear();
 
 import Fastify, { FastifyInstance } from 'fastify'
-
-
 import path from 'path';
-import { log } from "@fn"
 import Table from 'cli-table3';
 import colors from "colors";
 
@@ -123,6 +120,15 @@ server.register(fastifyStatic, {
   etag: true
 });
 
+// Configurar Next.js
+import next from '@fastify/nextjs';
+server.register(next, { dev: process.env.NODE_ENV !== 'production' });
+
+server.after(() => {
+  server.next('/hello');
+});
+
+
 import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 
@@ -135,9 +141,9 @@ server.register(fastifyView, {
 });
 
 // routers
-import { healthcheck, pdf } from "./src/routers"
+import { healthcheck } from "./src/routers"
 server.register(healthcheck, { prefix: '/' })
-server.register(pdf, { prefix: '/pdf' })
+
 const start = async () => {
   try {
     const port = Number(PORT) || 3500
