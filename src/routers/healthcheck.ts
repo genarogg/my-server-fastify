@@ -49,10 +49,10 @@ const healthcheck = (server: FastifyInstance) => {
             const parsedMetrics = parsePrometheusMetrics(metrics)
    
             console.log(JSON.stringify(parsedMetrics))
-            return reply.view("healthcheck", {
-                healthcheck: "healthcheck",
-                metrics: JSON.stringify(parsedMetrics),
-            })
+            // return reply.view("healthcheck", {
+            //     healthcheck: "healthcheck",
+            //     metrics: JSON.stringify(parsedMetrics),
+            // })
         } catch (error) {
             server.log.error(error)
             return reply.status(500).send("Error fetching metrics")

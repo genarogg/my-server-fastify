@@ -129,16 +129,16 @@ server.after(() => {
 });
 
 
-import fastifyView from '@fastify/view';
-import ejs from 'ejs';
+// import fastifyView from '@fastify/view';
+// import ejs from 'ejs';
 
-server.register(fastifyView, {
-  engine: {
-    ejs
-  },
-  root: path.join(__dirname, 'src', 'views'),
-  viewExt: 'ejs',
-});
+// server.register(fastifyView, {
+//   engine: {
+//     ejs
+//   },
+//   root: path.join(__dirname, 'src', 'views'),
+//   viewExt: 'ejs',
+// });
 
 // routers
 import { healthcheck } from "./src/routers"
