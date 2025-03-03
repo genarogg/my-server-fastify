@@ -1,6 +1,6 @@
 // Limpia la consola
-import clear from "console-clear";
-clear();
+// import clear from "console-clear";
+// clear();
 
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path';
