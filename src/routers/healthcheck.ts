@@ -1,5 +1,6 @@
 import type { FastifyInstance } from "fastify"
 import { register } from "prom-client"
+import { successResponse, errorResponse } from "@fn"
 
 const parsePrometheusMetrics = (metrics: string) => {
     const parsedMetrics: Record<string, any> = {}
@@ -43,16 +44,13 @@ const parsePrometheusMetrics = (metrics: string) => {
 
 const healthcheck = (server: FastifyInstance) => {
 
-    server.get("/", async (request, reply) => {
+    server.post("/", async (request, reply) => {
         try {
             const metrics = await register.metrics()
             const parsedMetrics = parsePrometheusMetrics(metrics)
    
-            console.log(JSON.stringify(parsedMetrics))
-            // return reply.view("healthcheck", {
-            //     healthcheck: "healthcheck",
-            //     metrics: JSON.stringify(parsedMetrics),
-            // })
+         
+            return reply.send(successResponse({ message: "Metrics fetched", data: parsedMetrics }))
         } catch (error) {
             server.log.error(error)
             return reply.status(500).send("Error fetching metrics")

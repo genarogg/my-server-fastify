@@ -125,13 +125,13 @@ import next from '@fastify/nextjs';
 server.register(next, { dev: process.env.NODE_ENV !== 'production' });
 
 server.after(() => {
-  server.next('/hello');
-  server.next('/home');
+
+  server.next('/');
 });
 
 // routers
 import { healthcheck } from "./src/routers"
-server.register(healthcheck, { prefix: '/' })
+server.register(healthcheck, { prefix: '/healthcheck' })
 
 const start = async () => {
   try {
@@ -148,7 +148,6 @@ const start = async () => {
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
       ['Graphql', colors.green(`http://localhost:${PORT}/graphiql`)],
       ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)],
-      ['Metrics', colors.cyan(`http://localhost:${PORT}/metrics`)],
       ["db estatus", colors.cyan(dbStatus)]
     );
 
