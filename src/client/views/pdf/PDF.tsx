@@ -44,9 +44,12 @@ const PDF: React.FC<PDFProps> = () => {
             const ColorPicker = ColorPickerModule.default;
 
             //@ts-ignore
-            const TexColorModule = await import('editorjs-text-color-plugin');
-            console.log(TexColorModule); // Check if the module contains a default export or named exports
-            const ColorPlugin = TexColorModule.default || TexColorModule;
+            const ImageModule = await import('@editorjs/image');
+            const Image = ImageModule.default;
+
+            //@ts-ignore
+            const ListModule = await import('@editorjs/list');
+            const List = ListModule.default;
 
             editor = new EditorJS({
                 holder: 'editorjs',
@@ -71,16 +74,38 @@ const PDF: React.FC<PDFProps> = () => {
                         class: ColorPicker as any,
                         inlineToolbar: true,
                         config: {
-                            colors: [
-                                '#EC7878',
-                                '#9C27B0',
-                                '#FFFFFF',
-                            ],
+                            colors: ['#EC7878', '#9C27B0', '#673AB7', '#3F51B5', '#0070FF', '#03A9F4', '#00BCD4', '#4CAF50', '#8BC34A', '#CDDC39', '#FFF'],
                             defaultColor: '#FF1300',
                         },
                     },
                     marker: {
                         class: Marker,
+                        inlineToolbar: true,
+                    },
+                    image: {
+                        class: Image,
+                        config: {
+                            uploader: {
+                                uploadByFile(file: File) {
+                                    return new Promise((resolve) => {
+                                        const reader = new FileReader()
+                                        reader.onload = (event) => {
+                                            resolve({
+                                                success: 1,
+                                                file: {
+                                                    url: event.target?.result,
+                                                },
+                                            })
+                                        }
+                                        reader.readAsDataURL(file)
+                                    })
+                                },
+                            },
+                        },
+                        // tunes: ["alignment"],
+                    },
+                    list: {
+                        class: List as any,
                         inlineToolbar: true,
                     },
 
