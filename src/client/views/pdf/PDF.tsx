@@ -20,7 +20,6 @@ const PDF: React.FC<PDFProps> = () => {
         let editor: any;
 
         (async () => {
-            // Importar dinámicamente EditorJS y Checklist para asegurar que se ejecuten solo en el cliente.
             const EditorJSModule = await import('@editorjs/editorjs');
             const EditorJS = EditorJSModule.default;
 
@@ -50,6 +49,17 @@ const PDF: React.FC<PDFProps> = () => {
             //@ts-ignore
             const ListModule = await import('@editorjs/list');
             const List = ListModule.default;
+
+            //@ts-ignore
+            const ColumnsModule = await import('@calumk/editorjs-columns');
+            const Columns = ColumnsModule.default;
+
+
+            const column_tools = {
+                header: Header,
+                paragraph: Paragraph,
+               
+            };
 
             editor = new EditorJS({
                 holder: 'editorjs',
@@ -107,6 +117,13 @@ const PDF: React.FC<PDFProps> = () => {
                     list: {
                         class: List as any,
                         inlineToolbar: true,
+                    },
+                    columns: {
+                        class: Columns,
+                        config: {
+                            EditorJsLibrary: EditorJS, 
+                            tools: column_tools, 
+                        },
                     },
 
                 },

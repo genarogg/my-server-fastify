@@ -14,6 +14,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@calumk/editorjs-columns": "^0.3.2",
     "@coolbytes/editorjs-paragraph": "^1.0.2",
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/editorjs": "^2.30.8",
