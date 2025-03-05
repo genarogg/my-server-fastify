@@ -3,12 +3,10 @@ import React from 'react'
 
 import Healthcheck from '../client/views/healthcheck/Healthcheck'
 
-interface homeProps {
-
-}
+interface homeProps { }
 
 const home: React.FC<homeProps> = () => {
-  return (<span className='healthcheck'><Healthcheck /></span>);
+  return (<Healthcheck />);
 }
 
 export default home;

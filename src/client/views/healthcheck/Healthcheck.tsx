@@ -134,7 +134,6 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen page-container">
             <Helmet>
-               
                 <link rel="stylesheet" href="/css/healthcheck/style.css" />
             </Helmet>
             <div className="max-w-7xl">
