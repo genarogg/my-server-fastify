@@ -42,6 +42,7 @@
     "colors": "^1.4.0",
     "console-clear": "^1.1.1",
     "dotenv": "^16.4.7",
+    "editorjs-anchor": "^1.1.3",
     "editorjs-color-picker": "^1.0.7",
     "editorjs-header-with-alignment": "^1.0.1",
     "editorjs-layout": "^1.2.5",
