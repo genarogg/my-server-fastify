@@ -1,219 +1,145 @@
-'use client'
-import React, { useEffect } from 'react'
-import { Helmet } from 'react-helmet'
-import Header from '@editorjs/header'
+"use client"
+import { useEffect, useState, useRef, useCallback } from "react"
+import type React from "react"
+import EditorHeader from "./components/EditorHeader"
+import { handleLoad, handleSave } from "./fn/fileOperations"
+import { initializeEditor } from "./fn/editorInitializer"
+import type EditorJS from "@editorjs/editorjs"
+import PdfMakeModal from "./components/PdfMakeModal"
 
-import {
-    CodeIcon,
-    Save,
-    FolderOpen,
-    AlignLeft,
-    AlignCenter,
-    AlignRight,
-    AlignJustify,
-} from 'lucide-react'
+type PDFProps = {}
 
-interface PDFProps { }
+interface PageSize {
+  name: string
+  width: number
+  height: number
+}
 
-const PDF: React.FC<PDFProps> = () => {
-    useEffect(() => {
-        let editor: any;
+const PDFEditor: React.FC<PDFProps> = () => {
+  const [selectedPageSize, setSelectedPageSize] = useState<string>("letter")
+  const editorRef = useRef<EditorJS | null>(null)
+  const [showPdfMakeModal, setShowPdfMakeModal] = useState(false)
+  const [pdfMakeCode, setPdfMakeCode] = useState("")
 
-        (async () => {
-            const EditorJSModule = await import('@editorjs/editorjs');
-            const EditorJS = EditorJSModule.default;
+  const pageSizes: Record<string, PageSize> = {
+    letter: { name: 'Letter (8.5" x 11")', width: 215.9, height: 279.4 },
+    legal: { name: 'Legal (8.5" x 14")', width: 215.9, height: 355.6 },
+    tabloid: { name: 'Tabloid (11" x 17")', width: 279.4, height: 431.8 },
+    a4: { name: "A4 (210mm x 297mm)", width: 210, height: 297 },
+    a3: { name: "A3 (297mm x 420mm)", width: 297, height: 420 },
+  }
 
-            //@ts-ignore
-            const ChecklistModule = await import('@editorjs/checklist');
-            const Checklist = ChecklistModule.default;
-            //@ts-ignore
-            const ParagraphModule = await import('@coolbytes/editorjs-paragraph');
-            const Paragraph = ParagraphModule.default;
+  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPageSize(e.target.value)
+    updateEditorSize(e.target.value)
+  }
 
-            //@ts-ignore
-            const TableModule = await import('@medistream/editorjs-table');
-            const Table = TableModule.default;
+  const updateEditorSize = useCallback(
+    (sizeKey: string) => {
+      const editorContainer = document.getElementById("editorjs")
+      if (editorContainer) {
+        Object.keys(pageSizes).forEach((size) => {
+          editorContainer.classList.remove(`size-${size}`)
+        })
+        editorContainer.classList.add(`size-${sizeKey}`)
+      }
+    },
+    [pageSizes],
+  )
 
-            //@ts-ignore
-            const MarkerModule = await import('@editorjs/marker');
-            const Marker = MarkerModule.default;
+  const addBordersToBlocks = () => {
+    const editorContainer = document.getElementById("editorjs")
+    if (editorContainer) {
+      editorContainer.classList.add("editor-with-borders")
+    }
+    const blocks = document.querySelectorAll(".ce-block")
+    blocks.forEach((block) => {
+      block.addEventListener("click", () => {
+        document.querySelectorAll(".ce-block--selected").forEach((el) => {
+          el.classList.remove("ce-block--selected")
+        })
+        block.classList.add("ce-block--selected")
+      })
+    })
+  }
 
-            //@ts-ignore
-            const ColorPickerModule = await import('editorjs-color-picker');
-            const ColorPicker = ColorPickerModule.default;
+  useEffect(() => {
+    initializeEditor({
+      editorRef,
+      selectedPageSize,
+      updateEditorSize,
+      addBordersToBlocks,
+    })
 
-            //@ts-ignore
-            const ImageModule = await import('@editorjs/image');
-            const Image = ImageModule.default;
+    return () => {
+      if (editorRef.current && typeof editorRef.current.destroy === "function") {
+        editorRef.current.destroy()
+      }
+    }
+  }, [selectedPageSize, updateEditorSize])
 
-            //@ts-ignore
-            const ListModule = await import('@editorjs/list');
-            const List = ListModule.default;
+  const applyAlignment = (alignment: "left" | "center" | "right" | "justify") => {
+    console.log(`Applying ${alignment} alignment`)
+    // Lógica de alineación pendiente de implementar
+  }
 
-            //@ts-ignore
-            const ColumnsModule = await import('@calumk/editorjs-columns');
-            const Columns = ColumnsModule.default;
+  const handleViewPdfMakeCode = async () => {
+    if (editorRef.current) {
+      try {
+        const savedData = await editorRef.current.save()
+        const pdfMakeCode = convertEditorJsToPdfMake(savedData)
+        setPdfMakeCode(pdfMakeCode)
+        setShowPdfMakeModal(true)
+      } catch (error) {
+        console.error("Error generando el código PDF:", error)
+      }
+    }
+  }
 
+  const handleLoadClick = () => {
+    handleLoad(editorRef.current)
+  }
 
-            const column_tools = {
-                header: Header,
-                paragraph: Paragraph,
-               
-            };
+  const handleSaveClick = () => {
+    handleSave(editorRef.current)
+  }
 
-            editor = new EditorJS({
-                holder: 'editorjs',
-                tools: {
-                    header: {
-                        class: Header as any,
-                        inlineToolbar: true,
-                    },
-                    checklist: {
-                        class: Checklist,
-                        inlineToolbar: true,
-                    },
-                    paragraph: {
-                        class: Paragraph,
-                        inlineToolbar: true,
-                    },
-                    table: {
-                        class: Table,
-                        inlineToolbar: true,
-                    },
-                    ColorPicker: {
-                        class: ColorPicker as any,
-                        inlineToolbar: true,
-                        config: {
-                            colors: ['#EC7878', '#9C27B0', '#673AB7', '#3F51B5', '#0070FF', '#03A9F4', '#00BCD4', '#4CAF50', '#8BC34A', '#CDDC39', '#FFF'],
-                            defaultColor: '#FF1300',
-                        },
-                    },
-                    marker: {
-                        class: Marker,
-                        inlineToolbar: true,
-                    },
-                    image: {
-                        class: Image,
-                        config: {
-                            uploader: {
-                                uploadByFile(file: File) {
-                                    return new Promise((resolve) => {
-                                        const reader = new FileReader()
-                                        reader.onload = (event) => {
-                                            resolve({
-                                                success: 1,
-                                                file: {
-                                                    url: event.target?.result,
-                                                },
-                                            })
-                                        }
-                                        reader.readAsDataURL(file)
-                                    })
-                                },
-                            },
-                        },
-                        // tunes: ["alignment"],
-                    },
-                    list: {
-                        class: List as any,
-                        inlineToolbar: true,
-                    },
-                    columns: {
-                        class: Columns,
-                        config: {
-                            EditorJsLibrary: EditorJS, 
-                            tools: column_tools, 
-                        },
-                    },
+  const handleCopyModalCode = () => {
+    navigator.clipboard
+      .writeText(pdfMakeCode)
+      .then(() => {
+        alert("¡Código copiado al portapapeles!")
+      })
+      .catch((err) => {
+        console.error("Error copiando el código: ", err)
+      })
+  }
 
-                },
-                data: {
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: 'PDF Editor',
-                                level: 1,
-                            },
-                        },
-                        {
-                            type: 'paragraph',
-                            data: {
-                                text: 'This is a simple PDF editor built with React and EditorJS.',
-                            },
-                        },
-                    ],
-                },
-            });
-        })();
+  return (
+    <>
+      <EditorHeader
+        selectedPageSize={selectedPageSize}
+        pageSizes={pageSizes}
+        handlePageSizeChange={handlePageSizeChange}
+        applyAlignment={applyAlignment}
+        handleViewPdfMakeCode={handleViewPdfMakeCode}
+        handleSaveClick={handleSaveClick}
+        handleLoadClick={handleLoadClick}
+      />
+      <main>
+        <div className="editor-content">
+          <div id="editorjs" className="editor-js-container"></div>
+        </div>
+      </main>
+      {showPdfMakeModal && (
+        <PdfMakeModal
+          pdfMakeCode={pdfMakeCode}
+          onClose={() => setShowPdfMakeModal(false)}
+          onCopy={handleCopyModalCode}
+        />
+      )}
+    </>
+  )
+}
 
-        return () => {
-            if (editor && typeof editor.destroy === 'function') {
-                editor.destroy();
-            }
-        };
-    }, []);
-
-    const applyAlignment = (alignment: 'left' | 'center' | 'right' | 'justify') => {
-        // Implementar lógica de alineación aquí
-    };
-
-    const handleViewPdfMakeCode = async () => {
-        // Implementar lógica para ver el código PDF aquí
-    };
-
-    const handleLoad = () => {
-        // Implementar lógica para cargar aquí
-    };
-
-    const handleSave = async () => {
-        // Implementar lógica para guardar aquí
-    };
-
-    return (
-        <>
-            <Helmet>
-                <link rel="stylesheet" href="/css/pdf/style.css" />
-            </Helmet>
-            <header>
-                <div className="col-1">
-                    <div className="alignment-buttons">
-                        <button className="toolbar-button" title="Align Left" onClick={() => applyAlignment('left')}>
-                            <AlignLeft size={16} />
-                        </button>
-                        <button className="toolbar-button" title="Align Center" onClick={() => applyAlignment('center')}>
-                            <AlignCenter size={16} />
-                        </button>
-                        <button className="toolbar-button" title="Align Right" onClick={() => applyAlignment('right')}>
-                            <AlignRight size={16} />
-                        </button>
-                        <button className="toolbar-button" title="Justify" onClick={() => applyAlignment('justify')}>
-                            <AlignJustify size={16} />
-                        </button>
-                    </div>
-                </div>
-                <div className="col-2">
-                    <button className="action-button" onClick={handleViewPdfMakeCode}>
-                        <CodeIcon size={16} />
-                        <span className="action-button-text">View Code</span>
-                    </button>
-                    <button className="action-button" onClick={handleSave}>
-                        <Save size={16} />
-                        <span className="action-button-text">Save</span>
-                    </button>
-                    <button className="action-button" onClick={handleLoad}>
-                        <FolderOpen size={16} />
-                        <span className="action-button-text">Load</span>
-                    </button>
-                </div>
-            </header>
-            <main>
-                <div className="editor-content">
-                    <div id="editorjs" className="editor-js-container"></div>
-                </div>
-            </main>
-        </>
-    );
-};
-
-export default PDF;
+export default PDFEditor
