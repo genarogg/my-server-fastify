@@ -135,7 +135,7 @@ server.register(fastifyStatic, {
 
 // routers
 import { healthcheck } from "./src/routers"
-server.register(healthcheck, { prefix: '/healthcheck' })
+server.register(healthcheck, { prefix: '/' })
 
 const start = async () => {
   try {
