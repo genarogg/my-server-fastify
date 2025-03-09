@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 
-import Healthcheck from '../client/views/healthcheck/Healthcheck'
+import Healthcheck from '../client/healthcheck/Healthcheck'
 
 interface homeProps { }
 
