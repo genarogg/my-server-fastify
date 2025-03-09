@@ -110,6 +110,18 @@ server.register(mercurius, {
   graphiql: true
 })
 
+import fastifyView from '@fastify/view';
+import ejs from 'ejs';
+
+server.register(fastifyView, {
+  engine: {
+    ejs
+  },
+  root: path.join(__dirname, 'src', 'views'),
+  viewExt: 'ejs',
+});
+
+
 // servir archivos estáticos
 import fastifyStatic from '@fastify/static';
 server.register(fastifyStatic, {
