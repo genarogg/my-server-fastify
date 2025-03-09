@@ -101,14 +101,14 @@ import dbConection from "./src/config/db-conection";
 let dbStatus: any;
 
 // graphql
-import mercurius from 'mercurius'
-import { schema, resolvers } from './src/graphql'
+// import mercurius from 'mercurius'
+// import { schema, resolvers } from './src/graphql'
 
-server.register(mercurius, {
-  schema,
-  resolvers,
-  graphiql: true
-})
+// server.register(mercurius, {
+//   schema,
+//   resolvers,
+//   graphiql: true
+// })
 
 // servir archivos estáticos
 import fastifyStatic from '@fastify/static';
@@ -127,6 +127,7 @@ server.register(next, { dev: process.env.NODE_ENV !== 'production' });
 server.after(() => {
   server.next('/');
   server.next('/pdf');
+  server.next('/api/generatePDF');
 });
 
 // routers
