@@ -2,9 +2,6 @@ import { renderToStream } from "@react-pdf/renderer";
 import * as templates from "./templates";
 import { createElement } from "react";
 
-
-
-
 const schema = `
   type Query {
     generatePDF(template: String!, data: String!): String
@@ -15,10 +12,12 @@ const resolvers = {
     Query: {
         generatePDF: async (_: any, { template, data }: { template: string; data: string }) => {
             try {
+
                 const componentName = template
                     .split("-")
                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join("") + "Template";
+
 
                 const Template = templates[componentName as keyof typeof templates];
 
@@ -28,6 +27,7 @@ const resolvers = {
 
                 let templateData;
                 try {
+
                     templateData = { data: JSON.parse(data) };
                 } catch (error) {
                     throw new Error("Invalid data format");

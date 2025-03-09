@@ -44,7 +44,7 @@
     "csv/csvReader.js",
     "prisma/changeProvider.js",
     "src/pdf/templates/HelloWorldTemplate.tsx",
-    "src/pdf/templates/HelloWorldTemplate.jsx"
+    "src/pdf/templates/HelloWorldTemplate.tsx"
   ],
   "exclude": [
     "node_modules",

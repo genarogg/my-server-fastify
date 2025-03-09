@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, Text } from "@react-pdf/renderer";
 
-const HelloWorldTemplate = ({ data }) => (
+const HelloWorldTemplate = ({ data }: any) => (
   <Document>
     <Page>
       <Text>{data.message}</Text>
