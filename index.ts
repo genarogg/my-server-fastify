@@ -101,14 +101,26 @@ import dbConection from "./src/config/db-conection";
 let dbStatus: any;
 
 // graphql
-// import mercurius from 'mercurius'
-// import { schema, resolvers } from './src/graphql'
+import mercurius from 'mercurius'
+import { schema, resolvers } from './src/graphql'
 
-// server.register(mercurius, {
-//   schema,
-//   resolvers,
-//   graphiql: true
-// })
+server.register(mercurius, {
+  schema,
+  resolvers,
+  graphiql: true
+})
+
+import fastifyView from '@fastify/view';
+import ejs from 'ejs';
+
+server.register(fastifyView, {
+  engine: {
+    ejs
+  },
+  root: path.join(__dirname, 'src', 'views'),
+  viewExt: 'ejs',
+});
+
 
 // servir archivos estáticos
 import fastifyStatic from '@fastify/static';
@@ -120,25 +132,16 @@ server.register(fastifyStatic, {
   etag: true
 });
 
-// Configurar Next.js
-import next from '@fastify/nextjs';
-server.register(next, { dev: process.env.NODE_ENV !== 'production' });
-
-server.after(() => {
-  server.next('/');
-  server.next('/pdf');
-  server.next('/api/generatePDF');
-});
 
 // routers
 import { healthcheck } from "./src/routers"
-server.register(healthcheck, { prefix: '/healthcheck' })
+server.register(healthcheck, { prefix: '/' })
 
 const start = async () => {
   try {
     const port = Number(PORT) || 3500
     dbStatus = await dbConection();
-    server.listen({ port })
+    await server.listen({ port, host: '0.0.0.0' });
 
     const table = new Table({
       head: ['Servicio', 'URL'],

@@ -48,14 +48,30 @@ const healthcheck = (server: FastifyInstance) => {
         try {
             const metrics = await register.metrics()
             const parsedMetrics = parsePrometheusMetrics(metrics)
-   
-         
+
+
             return reply.send(successResponse({ message: "Metrics fetched", data: parsedMetrics }))
         } catch (error) {
             server.log.error(error)
             return reply.status(500).send("Error fetching metrics")
         }
     })
+
+    server.get("/", async (request, reply) => {
+        try {
+            const metrics = await register.metrics()
+            const parsedMetrics = parsePrometheusMetrics(metrics)
+
+            // Crear mockData basado en parsedMetrics
+
+            // Pasar mockData a la vista
+            return reply.view("/healthcheck/index", { data: parsedMetrics })
+        } catch (error) {
+            server.log.error(error)
+            return reply.status(500).send("Error fetching metrics")
+        }
+    })
+
 }
 
 export default healthcheck
