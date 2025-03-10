@@ -1,12 +1,11 @@
-import hello from "./resolvers/saludo/hello";
+import helloResolvers from "./resolvers/saludo";
+import pdfResolver from "./resolvers/pdf"
 
 const resolvers = {
     Query: {
-        hello
+        ...helloResolvers.Query,
+        ...pdfResolver.Query
     },
-
-
-
 };
 
 export default resolvers;

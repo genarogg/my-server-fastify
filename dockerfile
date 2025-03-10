@@ -17,7 +17,7 @@ COPY . .
 RUN npx prisma generate
 
 # Expone el puerto en el que la aplicación escuchará
-EXPOSE 4500
+EXPOSE 4000
 
 # Comando para ejecutar la aplicación
 CMD ["npm", "run", "dev"]

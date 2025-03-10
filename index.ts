@@ -141,7 +141,7 @@ const start = async () => {
   try {
     const port = Number(PORT) || 3500
     dbStatus = await dbConection();
-    server.listen({ port })
+    await server.listen({ port, host: '0.0.0.0' });
 
     const table = new Table({
       head: ['Servicio', 'URL'],

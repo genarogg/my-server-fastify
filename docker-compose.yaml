@@ -3,7 +3,7 @@ services:
     build: .
     container_name: solicitudes_app
     ports:
-      - "4700:4000"
+      - "4000:4000"
     volumes:
       - .:/usr/src/app
       - solicitudes_app_data:/usr/src/app/data
