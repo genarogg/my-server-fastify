@@ -1,5 +1,5 @@
 import { prisma } from "@fn";
-import {ip} from "address";
+import { ip } from "address";
 interface CrearBitacoraArgs {
     usuarioId: number;
     accion: string;
@@ -8,7 +8,7 @@ interface CrearBitacoraArgs {
 
 const crearBitacora = async ({ usuarioId, accion, mensaje }: CrearBitacoraArgs) => {
     try {
-        const myIP = ip();
+        const myIP = ip() || "";
         const bitacora = await prisma.bitacora.create({
             data: {
                 usuarioId,
