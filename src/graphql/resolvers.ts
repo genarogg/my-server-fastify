@@ -1,10 +1,10 @@
-import helloResolvers from "./resolvers/saludo";
-import pdfResolver from "./resolvers/pdf"
+import demoResolvers from "./resolvers/demo";
+import pdfResolverResolvers from "./resolvers/pdf"
 
 const resolvers = {
     Query: {
-        ...helloResolvers.Query,
-        ...pdfResolver.Query
+        ...demoResolvers.Query,
+        ...pdfResolverResolvers.Query,
     },
 };
 

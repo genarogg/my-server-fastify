@@ -1,4 +1,4 @@
-
+// import { UploadStatus } from '@prisma/client';
 
 const createEnumString = (enumObj: object) => {
     const keys = Object.keys(enumObj);
@@ -9,7 +9,7 @@ const createEnumString = (enumObj: object) => {
 };
 
 const enums = /* GraphQL */`
-   
+
    
 `;
 

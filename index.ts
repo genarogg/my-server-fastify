@@ -2,30 +2,31 @@
 import clear from "console-clear";
 clear();
 
+
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path';
 import Table from 'cli-table3';
 import colors from "colors";
 
 import 'dotenv/config';
-const { PORT, CORS_URL } = process.env;
+const { PORT } = process.env;
 
 const server: FastifyInstance = Fastify({})
 
 // Configura y registra @fastify/cors
 import cors from '@fastify/cors';
 server.register(cors, {
-  origin: CORS_URL || '*',
+  origin: '*', 
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 });
 
-//configurar helmet
+// configurar helmet
 import helmet from '@fastify/helmet';
 server.register(helmet, {
   global: true,
   contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: true,
+  crossOriginEmbedderPolicy: false,
   frameguard: { action: 'deny' },
   hidePoweredBy: true,
 });
@@ -100,15 +101,60 @@ server.register(fastifyMetrics, {
 import dbConection from "./src/config/db-conection";
 let dbStatus: any;
 
-// graphql
-import mercurius from 'mercurius'
-import { schema, resolvers } from './src/graphql'
 
-server.register(mercurius, {
-  schema,
-  resolvers,
-  graphiql: true
-})
+// Registrar @fastify/express
+import fastifyExpress from '@fastify/express';
+import express from 'express';
+
+import { ApolloServer } from "@apollo/server";
+
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+
+import bodyParser from "body-parser";
+import { processRequest } from "graphql-upload-minimal";
+import { schema, resolvers } from "./src/graphql"
+
+server.register(fastifyExpress).after(async () => {
+  const app = express();
+
+  const apolloServer = new ApolloServer({
+    typeDefs: schema,
+    resolvers,
+    introspection: true,
+    csrfPrevention: false,
+    plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+  });
+
+  await apolloServer.start();
+
+  app.use(
+    "/graphql",
+    // Middleware para procesar peticiones multipart (subida de archivos)
+    async (req, res, next) => {
+      if (
+        req.method === "POST" &&
+        req.headers["content-type"] &&
+        req.headers["content-type"].includes("multipart/form-data")
+      ) {
+        try {
+          req.body = await processRequest(req, res);
+        } catch (error) {
+          return next(error);
+        }
+      }
+      next();
+    },
+    // Este parser se usará para peticiones JSON (no multipart)
+    bodyParser.json(),
+
+    expressMiddleware(apolloServer)
+  );
+
+  server.use(app);
+
+});
+
 
 import fastifyView from '@fastify/view';
 import ejs from 'ejs';
@@ -137,6 +183,9 @@ server.register(fastifyStatic, {
 import { healthcheck } from "./src/routers"
 server.register(healthcheck, { prefix: '/' })
 
+
+import tack from "./src/tasks"
+
 const start = async () => {
   try {
     const port = Number(PORT) || 3500
@@ -148,9 +197,12 @@ const start = async () => {
       colWidths: [20, 50]
     });
 
+    /* ejecutar tareas programadas */
+    tack()
+
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
-      ['Graphql', colors.green(`http://localhost:${PORT}/graphiql`)],
+      ['Graphql', colors.green(`http://localhost:${PORT}/graphql`)],
       ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)],
       ["db estatus", colors.cyan(dbStatus)]
     );
@@ -159,6 +211,7 @@ const start = async () => {
     console.log(table.toString());
   } catch (err) {
     server.log.error(err)
+    console.log(err)
     process.exit(1)
   }
 }
