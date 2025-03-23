@@ -1,7 +1,15 @@
 [build]
+  command = "npm run build"
   functions = "functions"
 
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/server"
-  status = 200
+[build.environment]
+  PRISMA_CLIENT_ENGINE_TYPE = "binary"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-core"
+
+[plugins.inputs]
+  included_files = ["node_modules/.prisma/client/**", "prisma/schema.prisma"]
+
+[functions]
+  node_bundler = "esbuild"
