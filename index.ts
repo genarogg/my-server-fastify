@@ -187,6 +187,11 @@ server.register(healthcheck, { prefix: '/' })
 import tack from "./src/tasks"
 
 const start = async () => {
+  
+  if(process.env.IS_SERVERLESS){
+    return
+  }
+
   try {
     const port = Number(PORT) || 3500
     dbStatus = await dbConection();
@@ -217,3 +222,5 @@ const start = async () => {
 }
 
 start()
+
+export default server;
