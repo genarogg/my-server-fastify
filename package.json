@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register index.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register index.ts",
     "initDB": "node ./prisma/cleanPrismaFolder.js && node ./prisma/changeProvider.js",
     "prisma": "npx prisma generate && npx prisma migrate dev --name init",
     "devs": "npm run initDB && npm run prisma && npm run dev",
-    "build": "tsc",
-    "postinstall": "prisma generate"
+    "clean": "rimraf dist",
+    "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",
+    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views",
+    "start": "node dist/index.js",
+    "production": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +37,7 @@
     "cmdk": "^1.0.4",
     "colors": "^1.4.0",
     "console-clear": "^1.1.1",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
@@ -56,6 +59,8 @@
   },
   "devDependencies": {
     "@react-pdf/types": "^2.9.0",
+    "@swc/cli": "^0.7.3",
+    "@swc/core": "^1.11.22",
     "@types/body-parser": "^1.19.5",
     "@types/console-clear": "^1.1.4",
     "@types/ejs": "^3.1.5",

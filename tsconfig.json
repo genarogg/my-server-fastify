@@ -29,7 +29,6 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "noEmit": true,
     "incremental": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
