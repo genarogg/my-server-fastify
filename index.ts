@@ -2,7 +2,6 @@
 import clear from "console-clear";
 clear();
 
-
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path';
 import Table from 'cli-table3';
