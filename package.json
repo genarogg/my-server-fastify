@@ -19,7 +19,7 @@
   "license": "ISC",
   "private": true,
   "description": "",
-  "engines": { "node": ">=18" },
+  "engines": { "node": ">= 22" },
   "dependencies": {
     "@apollo/server": "^4.11.3",
     "@fastify/caching": "^9.0.3",
