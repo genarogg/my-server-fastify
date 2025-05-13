@@ -50,6 +50,14 @@ server.register(rateLimit, {
   }
 });
 
+import underPressure from '@fastify/under-pressure';
+
+server.register(underPressure, {
+  maxEventLoopDelay: 1000,
+  message: 'Under pressure!',
+  retryAfter: 50
+});
+
 // Configurar slow down
 import slowDown from 'fastify-slow-down';
 server.register(slowDown, {
