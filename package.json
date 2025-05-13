@@ -2,21 +2,24 @@
   "name": "my-server-fastify",
   "version": "1.0.0",
   "main": "index.js",
+    "type": "module",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register index.ts",
+    "dev": "tsx -r tsconfig-paths/register index.ts",
     "initDB": "node ./prisma/cleanPrismaFolder.js && node ./prisma/changeProvider.js",
     "prisma": "npx prisma generate && npx prisma migrate dev --name init",
     "devs": "npm run initDB && npm run prisma && npm run dev",
     "clean": "rimraf dist",
     "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",
-    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views",
+    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
     "start": "node dist/index.js",
     "production": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "private": true,
   "description": "",
+  "engines": { "node": ">=18" },
   "dependencies": {
     "@apollo/server": "^4.11.3",
     "@fastify/caching": "^9.0.3",
@@ -53,8 +56,6 @@
     "react-dom": "^18.3.1",
     "react-pdf": "^9.2.1",
     "serverless-http": "^3.2.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.11"
   },
   "devDependencies": {

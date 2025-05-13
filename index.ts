@@ -7,6 +7,12 @@ import path from 'path';
 import Table from 'cli-table3';
 import colors from "colors";
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 import 'dotenv/config';
 const { PORT } = process.env;
 
@@ -15,7 +21,7 @@ const server: FastifyInstance = Fastify({})
 // Configura y registra @fastify/cors
 import cors from '@fastify/cors';
 server.register(cors, {
-  origin: '*', 
+  origin: '*',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 });
@@ -170,7 +176,7 @@ server.register(fastifyView, {
 // servir archivos estáticos
 import fastifyStatic from '@fastify/static';
 server.register(fastifyStatic, {
-  root: path.join(__dirname, "src", 'public'),
+  root: path.join(__dirname, "..", "public"),
   prefix: '/',
   cacheControl: true,
   maxAge: 86400000,
@@ -186,8 +192,8 @@ server.register(healthcheck, { prefix: '/' })
 import tack from "./src/tasks"
 
 const start = async () => {
-  
-  if(process.env.IS_SERVERLESS){
+
+  if (process.env.IS_SERVERLESS) {
     return
   }
 
