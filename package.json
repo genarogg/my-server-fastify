@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx -r tsconfig-paths/register index.ts",
-    "initDB": "node ./prisma/cleanPrismaFolder.js && node ./prisma/changeProvider.js",
-    "prisma": "npx prisma generate && npx prisma migrate dev --name init",
-    "devs": "npm run initDB && npm run prisma && npm run dev",
+    "prisma": "npx prisma generate && npx prisma migrate dev",
+    "devs": "npm run prisma && npm run dev",
     "clean": "rimraf dist",
     "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",
     "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
@@ -20,7 +19,7 @@
   "private": true,
   "description": "",
   "engines": {
-    "node": ">= 22"
+    "node": ">= 20"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
