@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx -r tsconfig-paths/register index.ts",
-    "prisma": "npx prisma generate && npx prisma migrate dev",
+    "start": "node dist/index.js",
     "devs": "npm run prisma && npm run dev",
+    "prisma": "npx prisma generate && npx prisma migrate dev",
     "clean": "rimraf dist",
     "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",
     "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
-    "start": "node dist/index.js",
     "production": "npm run build && npm run start"
   },
   "keywords": [],
