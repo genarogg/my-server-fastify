@@ -1,17 +1,82 @@
 import React from "react";
-import { Document, Page, Text, View } from "@react-pdf/renderer";
+import {
+  LayoutPDF,
+  Container,
+  Row,
+  Col1,
+  Col2,
+  Col3,
+  Col4,
+  Col5,
+  Col6,
+  Col7,
+  Col8,
+  Col9,
+  Col10,
+  Col11,
+  Col12,
+  P,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  Strong,
+  Em,
+  U,
+  Small,
+  Blockquote,
+  Mark,
+  Span,
+  BR,
+  A,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Left,
+  Right,
+  Center,
+  Img,
+  QR,
+  Header,
+  Footer,
+  UL,
+  OL,
+  LI,
+  View,
+  Text,
+  StyleSheet,
+  Font,
+} from "react-pdf-levelup";
 
-const HelloWorldTemplate = ({ data }: any) => (
-  <Document>
-    <Page>
-      <Text>{data.message}</Text>
-      <View>
-        {data.items && data.items.map((item: any, index: number) => (
-          <Text key={index}>{item}</Text>
-        ))}
-      </View>
-    </Page>
-  </Document>
-);
+const Component = ({ data }) => {
+  const Footer = () => {
+    return (
+      <>
+        <P>hola</P>
+      </>
+    );
+  };
 
-export default HelloWorldTemplate;
+  return (
+    <LayoutPDF footer={<Footer />}>
+      <P>
+        Lorem ipsum acts as a stand-in for actual text when the final content is
+        not yet available. This allows designers to focus on layout and visual
+        elements without being distracted by the meaning of the text. Origin:
+        It's derived from a Latin text written by Cicero in 45 BC, but the words
+        have been altered and rearranged to create the nonsensical text we know
+        today. Usage: Lorem ipsum is widely used in various design programs and
+        website templates. Benefits: It helps designers assess the overall look
+        and feel of a design, ensuring the visual presentation is appealing
+        before the real content is added. Not actual Latin: While it resembles
+        Latin, the text is not meant to be meaningful and is often used as a
+        clear indicator that the space is reserved for actual content.
+      </P>
+    </LayoutPDF>
+  );
+};
