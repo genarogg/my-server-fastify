@@ -1,59 +1,12 @@
 import React from "react";
 import {
   LayoutPDF,
-  Container,
-  Row,
-  Col1,
-  Col2,
-  Col3,
-  Col4,
-  Col5,
-  Col6,
-  Col7,
-  Col8,
-  Col9,
-  Col10,
-  Col11,
-  Col12,
+
   P,
-  H1,
-  H2,
-  H3,
-  H4,
-  H5,
-  H6,
-  Strong,
-  Em,
-  U,
-  Small,
-  Blockquote,
-  Mark,
-  Span,
-  BR,
-  A,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Left,
-  Right,
-  Center,
-  Img,
-  QR,
-  Header,
-  Footer,
-  UL,
-  OL,
-  LI,
-  View,
-  Text,
-  StyleSheet,
-  Font,
+
 } from "react-pdf-levelup";
 
-const Component = ({ data }) => {
+const Component = ({ data }:any) => {
   const Footer = () => {
     return (
       <>
