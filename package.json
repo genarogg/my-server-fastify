@@ -59,7 +59,8 @@
     "react-pdf": "^9.2.1",
     "react-pdf-levelup": "^3.1.16",
     "serverless-http": "^3.2.0",
-    "tsc-alias": "^1.8.11"
+    "tsc-alias": "^1.8.11",
+    "tsx": "^4.20.3"
   },
   "devDependencies": {
     "@react-pdf/types": "^2.9.0",

@@ -80,3 +80,5 @@ const Component = ({ data }) => {
     </LayoutPDF>
   );
 };
+
+export default Component;
