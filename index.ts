@@ -81,29 +81,18 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 
 server.register(fastifySwagger, {
-  swagger: {
-    info: {
-      title: 'API documentacion',
-      description: 'API documentacion for my project',
-      version: '1.0.0'
-    },
-    host: 'localhost:' + Number(PORT),
-    schemes: ['http'],
-    consumes: ['application/json'],
-    produces: ['application/json']
-  }
+  mode: 'static',
+  specification: {
+    path: path.join(__dirname, 'public', 'docs', 'swagger.yaml'),
+    baseDir: __dirname,
+  },
 });
 
 server.register(fastifySwaggerUi, {
-  routePrefix: '/documentacion',
-  uiConfig: {
-    docExpansion: 'full',
-    deepLinking: false
-  },
+  routePrefix: '/docs',
   staticCSP: true,
-  transformStaticCSP: (header) => header
+  transformStaticCSP: (header) => header,
 });
-
 // Configurar metrics
 import fastifyMetrics from 'fastify-metrics';
 server.register(fastifyMetrics, {
@@ -221,7 +210,7 @@ const start = async () => {
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
       ['Graphql', colors.green(`http://localhost:${PORT}/graphql`)],
-      ['Documentacion', colors.cyan(`http://localhost:${PORT}/documentacion`)],
+      ['Documentacion', colors.cyan(`http://localhost:${PORT}/docs`)],
       ["db estatus", colors.cyan(dbStatus)]
     );
 
