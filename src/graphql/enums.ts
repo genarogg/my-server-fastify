@@ -1,4 +1,4 @@
-// import { UploadStatus } from '@prisma/client';
+import { Rol, AccionesBitacora } from '@prisma/client';
 
 const createEnumString = (enumObj: object) => {
     const keys = Object.keys(enumObj);
@@ -9,7 +9,12 @@ const createEnumString = (enumObj: object) => {
 };
 
 const enums = /* GraphQL */`
-
+    enum Rol {
+        ${createEnumString(Rol)}
+    }
+    enum AccionesBitacora {
+        ${createEnumString(AccionesBitacora)}
+    }
    
 `;
 

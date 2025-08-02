@@ -14,6 +14,9 @@ model Usuario {
   email    String     @unique
   password String
   Bitacora Bitacora[]
+  rol      Rol        @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Bitacora {
@@ -38,4 +41,11 @@ enum AccionesBitacora {
   DELETE_USER
   VIEW
   ERROR
+}
+
+enum Rol {
+  ADMIN
+  USER
+  ASISTENTE
+  CLIENTE
 }

@@ -3,13 +3,24 @@ const schemas = /* GraphQL */ `
 ##############################################
 # Tipos básicos
 ##############################################
-# Tipo para el modelo Usuario
 
+type Usuario {
+  id: Int!
+  name: String!
+  email: String!
+  rol: Rol!
+  token: String!
+}
 
 ##############################################
 # Tipos de response
 ##############################################
 
+type UsuarioResponse {
+  type: String
+  message: String
+  data: Usuario
+}
 
 ##############################################
 # Tipos de entrada
@@ -22,6 +33,7 @@ input PDFDataInput {
 ##############################################
 # Scalar
 ##############################################
+
 scalar Upload
 scalar Date
 
@@ -34,6 +46,15 @@ type Query {
   generatePDF(template: String!, data: PDFDataInput!): String  
 }
 
+type Mutation {
+  registerUsuario(
+    token: String
+    name: String!
+    email: String!
+    password: String!
+    rol: Rol
+  ): UsuarioResponse
+}
 `;
 
 export default schemas;
