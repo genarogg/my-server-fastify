@@ -1,6 +1,7 @@
-import registerUsuario from "./register";
-import loginUsuario from "./login";
-import validarSesion from "./validarSesion";
+import registerUsuario from "./sesionRegister";
+import loginUsuario from "./sesionLogin";
+import validarSesion from "./sesionValidarSesion";
+import resetPassword from "./resetSendEmail";
 
 const resolvers = {
     Query: {
@@ -10,6 +11,7 @@ const resolvers = {
     Mutation: {
         registerUsuario,
         loginUsuario,
+        resetPassword
     }
 };
 

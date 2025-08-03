@@ -22,6 +22,11 @@ type UsuarioResponse {
   data: Usuario
 }
 
+type NotificacionResponse {
+  type: String
+  message: String
+}
+
 ##############################################
 # Tipos de entrada
 ##############################################
@@ -62,6 +67,8 @@ type Mutation {
     password: String!, 
     captchaToken: String
     ): UsuarioResponse!
+
+  resetPassword(email: String!): NotificacionResponse!
 }
 `;
 
