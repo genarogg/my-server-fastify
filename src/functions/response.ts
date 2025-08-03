@@ -1,8 +1,8 @@
 type ResponseType = "success" | "error" | "warning";
 
 interface ResponsePayload {
-    message?: string;
     type?: ResponseType;
+    message?: string;
     token?: string;
     data?: any;
     [key: string]: any;

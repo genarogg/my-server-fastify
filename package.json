@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx -r tsconfig-paths/register index.ts",
+    "dev": "nodemon --exec \"tsx -r tsconfig-paths/register index.ts\"",
     "start": "node dist/index.js",
     "devs": "npm run prisma && npm run dev",
     "prisma": "npx prisma generate && npx prisma migrate dev",
@@ -78,6 +78,7 @@
     "@types/react-helmet": "^6.1.11",
     "@types/ws": "^8.5.14",
     "autoprefixer": "^10.4.20",
+    "nodemon": "^3.1.10",
     "prisma": "^6.13.0",
     "rimraf": "^6.0.1",
     "tsconfig-paths": "^4.2.0",

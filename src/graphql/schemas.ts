@@ -52,8 +52,14 @@ type Mutation {
     name: String!
     email: String!
     password: String!
+    captchaToken: String
     rol: Rol
-  ): UsuarioResponse
+  ): UsuarioResponse!
+  loginUsuario(
+    email: String!, 
+    password: String!, 
+    captchaToken: String
+    ): UsuarioResponse!
 }
 `;
 

@@ -1,8 +1,10 @@
 import registerUsuario from "./register";
+import loginUsuario from "./login";
 
 const resolvers = {
     Mutation: {
-        registerUsuario
+        registerUsuario,
+        loginUsuario
     }
 };
 
