@@ -83,8 +83,8 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 server.register(fastifySwagger, {
   mode: 'static',
   specification: {
-    path: path.join(__dirname, 'public', 'docs', 'swagger.yaml'),
-    baseDir: __dirname,
+    path: path.join(process.cwd(), 'public', 'docs', 'swagger.yaml'),
+    baseDir: process.cwd(),
   },
 });
 
@@ -93,6 +93,7 @@ server.register(fastifySwaggerUi, {
   staticCSP: true,
   transformStaticCSP: (header) => header,
 });
+
 // Configurar metrics
 import fastifyMetrics from 'fastify-metrics';
 server.register(fastifyMetrics, {
@@ -117,7 +118,7 @@ import bodyParser from "body-parser";
 import { processRequest } from "graphql-upload-minimal";
 import { schema, resolvers } from "./src/graphql"
 
-server.register(fastifyExpress).after(async () => {
+server.register(fastifyExpress).after(() => {
   const app = express();
 
   const apolloServer = new ApolloServer({
@@ -128,33 +129,29 @@ server.register(fastifyExpress).after(async () => {
     plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
   });
 
-  await apolloServer.start();
-
-  app.use(
-    "/graphql",
-    // Middleware para procesar peticiones multipart (subida de archivos)
-    async (req, res, next) => {
-      if (
-        req.method === "POST" &&
-        req.headers["content-type"] &&
-        req.headers["content-type"].includes("multipart/form-data")
-      ) {
-        try {
-          req.body = await processRequest(req, res);
-        } catch (error) {
-          return next(error);
+  apolloServer.start().then(() => {
+    app.use(
+      "/graphql",
+      async (req, res, next) => {
+        if (
+          req.method === "POST" &&
+          req.headers["content-type"] &&
+          req.headers["content-type"].includes("multipart/form-data")
+        ) {
+          try {
+            req.body = await processRequest(req, res);
+          } catch (error) {
+            return next(error);
+          }
         }
-      }
-      next();
-    },
-    // Este parser se usará para peticiones JSON (no multipart)
-    bodyParser.json(),
+        next();
+      },
+      bodyParser.json(),
+      expressMiddleware(apolloServer)
+    );
 
-    expressMiddleware(apolloServer)
-  );
-
-  server.use(app);
-
+    server.use(app);
+  });
 });
 
 
