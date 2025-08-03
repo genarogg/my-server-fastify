@@ -6,6 +6,7 @@ const resolvers = {
     Query: {
         ...demoResolvers.Query,
         ...pdfResolverResolvers.Query,
+        ...usuarioResolver.Query
     },
 
     Mutation: {

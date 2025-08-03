@@ -44,6 +44,7 @@ scalar Date
 type Query {
   hello: String
   generatePDF(template: String!, data: PDFDataInput!): String  
+  validarSesion(token: String!): UsuarioResponse!
 }
 
 type Mutation {
@@ -55,6 +56,7 @@ type Mutation {
     captchaToken: String
     rol: Rol
   ): UsuarioResponse!
+
   loginUsuario(
     email: String!, 
     password: String!, 

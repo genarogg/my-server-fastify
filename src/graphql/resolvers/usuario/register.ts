@@ -5,7 +5,8 @@ import {
     errorResponse,
     prisma,
     verificarToken,
-    generarToken
+    generarToken,
+    validarCapchat
 } from "@fn";
 import { AccionesBitacora, Rol } from "@prisma/client";
 
@@ -15,13 +16,27 @@ interface RegisterUsuarioArgs {
     email: string;
     password: string;
     rol?: Rol;
+    captchaToken?: string;
 }
 
 const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
-    const { token, name, email, password, rol } = args;
+    const { token, name, email, password, rol, captchaToken } = args;
 
     if (!name || !email || !password) {
         return errorResponse({ message: "Todos los campos son obligatorios" });
+    }
+
+    // Validar reCAPTCHA solo en entorno de producción
+    if (process.env.NODE_ENV === "production") {
+        if (!captchaToken) {
+            return errorResponse({ message: "Captcha requerido" });
+        }
+
+        const captchaValido = await validarCapchat(captchaToken);
+
+        if (!captchaValido) {
+            return errorResponse({ message: "Captcha inválido" });
+        }
     }
 
     try {
