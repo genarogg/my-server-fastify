@@ -1,17 +1,22 @@
 import registerUsuario from "./sesionRegister";
 import loginUsuario from "./sesionLogin";
-import validarSesion from "./sesionValidarSesion";
 import resetPassword from "./resetSendEmail";
+import resetPassWithToken from "./resetPassWithToken";
+
+import validarSesion from "./sesionValidarSesion";
+import getUsuario from "./getUsuario";
 
 const resolvers = {
     Query: {
-        validarSesion
+        validarSesion,
+        getUsuario
     },
     
     Mutation: {
         registerUsuario,
         loginUsuario,
-        resetPassword
+        resetPassword,
+        resetPassWithToken
     }
 };
 

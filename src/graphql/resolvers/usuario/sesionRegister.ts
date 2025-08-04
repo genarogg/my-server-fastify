@@ -51,7 +51,7 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
         if (token) {
             const usuarioAutenticado = await verificarToken(token);
 
-            if ("type" in usuarioAutenticado && usuarioAutenticado.type === "error") {
+            if (!usuarioAutenticado.id) {
                 return errorResponse({ message: "Token inválido o expirado" });
             }
 

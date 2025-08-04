@@ -10,6 +10,7 @@ interface resetPassWithTokenArgs {
 
 const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetPassWithTokenArgs) => {
     try {
+
         const { id: usuarioId } = await verificarToken(token);
 
         if (!usuarioId) {
@@ -18,7 +19,7 @@ const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetP
 
         // Buscar usuario por ID
         const usuarioExistente = await prisma.usuario.findUnique({
-            where: { id: Number(usuarioId) }
+            where: { id: Number(usuarioId) },
         });
 
         if (!usuarioExistente) {
@@ -49,7 +50,13 @@ const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetP
 
         const tokenInit = generarToken({ id: Number(usuarioId) });
 
-        return successResponse({ message: 'Contraseña actualizada exitosamente', data: { usuario: usuarioActualizado, token: tokenInit } });
+        return successResponse({
+            message: 'Contraseña actualizada exitosamente',
+            data: {
+                ...usuarioActualizado,
+                token: tokenInit
+            }
+        });
     } catch (error: any) {
         return errorResponse({ message: error.message });
     }

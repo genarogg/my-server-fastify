@@ -22,6 +22,12 @@ type UsuarioResponse {
   data: Usuario
 }
 
+type UsuariosResponse {
+  type: String
+  message: String
+  data: [Usuario]
+}
+
 type NotificacionResponse {
   type: String
   message: String
@@ -50,6 +56,7 @@ type Query {
   hello: String
   generatePDF(template: String!, data: PDFDataInput!): String  
   validarSesion(token: String!): UsuarioResponse!
+  getUsuario(token: String!, email: String): UsuariosResponse!
 }
 
 type Mutation {
@@ -69,6 +76,8 @@ type Mutation {
     ): UsuarioResponse!
 
   resetPassword(email: String!): NotificacionResponse!
+
+  resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
 }
 `;
 
