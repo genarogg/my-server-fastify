@@ -8,12 +8,12 @@ import { Rol } from "@prisma/client";
 
 interface ObtenerUsuariosArgs {
     token: string;
-    email?: string;
+    filtro?: string;
 }
 
 const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
 
-    const { token, email } = args;
+    const { token, filtro } = args;
 
     if (!token) {
         return errorResponse({ message: "Token requerido" });
@@ -28,12 +28,13 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
         }
 
         // Si se proporciona un email específico, buscar solo ese usuario
-        if (email) {
+        if (filtro) {
+
+            const filtroCleaned = filtro.trim().toLowerCase();
+
             const usuario = await prisma.usuario.findUnique({
-                where: { email },
-                omit: {
-                    password: true
-                }
+                where: { email: filtroCleaned },
+                omit: { password: true }
             });
 
             if (!usuario) {
@@ -52,7 +53,7 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
 
             return successResponse({
                 message: "Usuario encontrado",
-                data: [usuario]
+                data: usuario
             });
         }
 
@@ -98,14 +99,17 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
         const usuarios = await prisma.usuario.findMany({
             where: whereCondition,
             omit: { password: true },
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
         });
+
+        const totalUsuarios = await prisma.usuario.count();
 
         return successResponse({
             message: "Usuarios obtenidos correctamente",
-            data: {
-                usuarios: [...usuarios],
-                total: usuarios.length
+            data: usuarios,
+            meta: {
+                total: usuarios.length,
+                page: totalUsuarios,
             }
         });
 

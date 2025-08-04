@@ -5,10 +5,11 @@ interface ResponsePayload {
     message?: string;
     token?: string;
     data?: any;
+    meta?: any;
     [key: string]: any;
 }
 
-const createResponse = (type: ResponseType, message?: string, token?: string, data?: any, additionalParams?: object): ResponsePayload => {
+const createResponse = (type: ResponseType, message?: string, token?: string, data?: any, meta?: any, additionalParams?: object): ResponsePayload => {
     const payload: ResponsePayload = { type };
 
     if (message) {
@@ -23,6 +24,10 @@ const createResponse = (type: ResponseType, message?: string, token?: string, da
         payload.data = data;
     }
 
+    if (meta) {
+        payload.meta = meta;
+    }
+
     if (additionalParams) {
         Object.assign(payload, additionalParams);
     }
@@ -31,16 +36,16 @@ const createResponse = (type: ResponseType, message?: string, token?: string, da
 };
 
 // Funciones de ayuda
-const successResponse = ({ message, token, data, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("success", message, token, data, additionalParams);
+const successResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
+    return createResponse("success", message, token, data, meta, additionalParams);
 };
 
-const errorResponse = ({ message, token, data, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("error", message, token, data, additionalParams);
+const errorResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
+    return createResponse("error", message, token, data, meta, additionalParams);
 };
 
-const warningResponse = ({ message, token, data, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("warning", message, token, data, additionalParams);
+const warningResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
+    return createResponse("warning", message, token, data, meta, additionalParams);
 };
 
 export { createResponse, successResponse, errorResponse, warningResponse };

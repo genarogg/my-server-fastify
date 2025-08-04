@@ -184,6 +184,7 @@ server.register(healthcheck, { prefix: '/' })
 
 
 import tack from "./src/tasks"
+import seed from "src/send";
 
 const start = async () => {
 
@@ -203,6 +204,7 @@ const start = async () => {
 
     /* ejecutar tareas programadas */
     tack()
+    seed()
 
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],

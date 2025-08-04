@@ -12,6 +12,17 @@ type Usuario {
   token: String!
 }
 
+type Meta {
+  total: Int
+  page: Int
+  limit: Int
+}
+
+##############################################
+# Tipos de datos paginados
+##############################################
+
+
 ##############################################
 # Tipos de response
 ##############################################
@@ -26,6 +37,7 @@ type UsuariosResponse {
   type: String
   message: String
   data: [Usuario]
+  meta: Meta
 }
 
 type NotificacionResponse {
@@ -56,7 +68,7 @@ type Query {
   hello: String
   generatePDF(template: String!, data: PDFDataInput!): String  
   validarSesion(token: String!): UsuarioResponse!
-  getUsuario(token: String!, email: String): UsuariosResponse!
+  getUsuario(token: String!, filtro: String): UsuariosResponse!
 }
 
 type Mutation {
