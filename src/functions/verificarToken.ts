@@ -7,21 +7,24 @@ const verificarToken = async (token: string) => {
 
     try {
         const payload = jwt.verify(token, JWTSECRETO) as JwtPayload | undefined;
-        
-        if (!payload || !payload.id) {
-            return errorResponse({ message: "El token no contiene un id de usuario válido" });
-        }
 
+        const isAuthenticated = { isAuthenticated: false }
+
+        if (!payload || !payload.id) {
+            console.error("Token inválido o sin ID");
+            return { payload, isAuthenticated };
+        }
 
         const usuario = await prisma.usuario.findUnique({
             where: { id: payload.id },
         });
 
         if (!usuario) {
-            return errorResponse({ message: "Usuario no encontrado" });
+            console.error("Usuario no encontrado");
+            return { payload, isAuthenticated };
         }
 
-        return usuario;
+        return { ...usuario, ...isAuthenticated };
     } catch (err) {
         console.error("Error al verificar el token:", err);
         return errorResponse({ message: "Error al verificar el token" });
