@@ -5,6 +5,9 @@ import caching from './plugin/caching';
 import swagger from "./plugin/swagger"
 import rateLimit from './plugin/rateLimit';
 import helmet from './plugin/helmet';
+import fastifyMetrics from './plugin/metrics';
+import corsFastify from './plugin/corsFastify';
+import underPressureFastify from './plugin/underPressureFastify';
 
 import dbConection from './db-conection';
 
@@ -16,5 +19,8 @@ export {
     swagger,
     rateLimit,
     helmet,
+    fastifyMetrics,
+    corsFastify,
+    underPressureFastify,
     dbConection,
 }

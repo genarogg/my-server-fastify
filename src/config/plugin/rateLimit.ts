@@ -1,7 +1,7 @@
+import type { FastifyInstance } from "fastify"
 import rateLimit from '@fastify/rate-limit';
 
-
-const rateLimite = (server: any) => {
+const rateLimite = (server: FastifyInstance) => {
 
     return server.register(rateLimit, {
         max: 100,

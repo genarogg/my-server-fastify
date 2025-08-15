@@ -12,21 +12,7 @@ const { PORT } = process.env;
 
 const server: FastifyInstance = Fastify({})
 
-// Configura y registra @fastify/cors
-import cors from '@fastify/cors';
-server.register(cors, {
-  origin: '*',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-});
 
-import underPressure from '@fastify/under-pressure';
-
-server.register(underPressure, {
-  maxEventLoopDelay: 1500,
-  message: 'Under pressure!',
-  retryAfter: 50
-});
 
 // Configurar slow down
 import slowDown from 'fastify-slow-down';
@@ -39,13 +25,6 @@ server.register(slowDown, {
 import compress from '@fastify/compress';
 server.register(compress, { global: true });
 
-
-// Configurar metrics
-import fastifyMetrics from 'fastify-metrics';
-server.register(fastifyMetrics, {
-  endpoint: '/metrics'
-});
-
 import {
   dbConection,
   viewEJS,
@@ -54,9 +33,11 @@ import {
   caching,
   swagger,
   helmet,
-  rateLimit
+  rateLimit,
+  fastifyMetrics,
+  underPressureFastify,
+  corsFastify
 } from "./src/config"
-
 
 viewEJS(server);
 staticFiles(server);
@@ -65,6 +46,9 @@ caching(server)
 swagger(server);
 rateLimit(server);
 helmet(server);
+fastifyMetrics(server);
+corsFastify(server);
+underPressureFastify(server);
 
 // routers
 import { healthcheck } from "./src/routers"
@@ -72,13 +56,8 @@ server.register(healthcheck, { prefix: '/' })
 
 
 import tack from "./src/tasks"
-import seed from "src/send";
 
 const start = async () => {
-
-  if (process.env.IS_SERVERLESS) {
-    return
-  }
 
   try {
     const port = Number(PORT) || 3500
@@ -92,7 +71,6 @@ const start = async () => {
 
     /* ejecutar tareas programadas */
     tack()
-    seed()
 
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],

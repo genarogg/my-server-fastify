@@ -7,8 +7,9 @@ import bodyParser from "body-parser";
 import { processRequest } from "graphql-upload-minimal";
 import depthLimit from "graphql-depth-limit";
 import { schema, resolvers } from "../../graphql";
+import type { FastifyInstance } from "fastify"
 
-const graphql = (server: any) => {
+const graphql = (server: FastifyInstance) => {
 
     return server.register(fastifyExpress).after(() => {
         const app = express();

@@ -1,6 +1,7 @@
+import type { FastifyInstance } from "fastify"
 import fastifyCaching from '@fastify/caching';
 
-const caching = (server: any) => {
+const caching = (server: FastifyInstance) => {
 
     return server.register(fastifyCaching, {
         privacy: fastifyCaching.privacy.PUBLIC,
