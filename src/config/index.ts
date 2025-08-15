@@ -8,6 +8,8 @@ import helmet from './plugin/helmet';
 import fastifyMetrics from './plugin/metrics';
 import corsFastify from './plugin/corsFastify';
 import underPressureFastify from './plugin/underPressureFastify';
+import slowDownFastify from './plugin/slowDownFastify';
+import compressFastify from './plugin/compressFastify';
 
 import dbConection from './db-conection';
 
@@ -22,5 +24,7 @@ export {
     fastifyMetrics,
     corsFastify,
     underPressureFastify,
+    slowDownFastify,
+    compressFastify,
     dbConection,
 }

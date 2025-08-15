@@ -1,29 +1,13 @@
-// Limpia la consola
+import Fastify, { FastifyInstance } from 'fastify'
+import Table from 'cli-table3';
 import clear from "console-clear";
+import colors from "colors";
+import 'dotenv/config';
+
 clear();
 
-import Fastify, { FastifyInstance } from 'fastify'
-
-import Table from 'cli-table3';
-import colors from "colors";
-
-import 'dotenv/config';
 const { PORT } = process.env;
-
 const server: FastifyInstance = Fastify({})
-
-
-
-// Configurar slow down
-import slowDown from 'fastify-slow-down';
-server.register(slowDown, {
-  delayAfter: 50,
-  delay: 500
-});
-
-// Configurar compresión
-import compress from '@fastify/compress';
-server.register(compress, { global: true });
 
 import {
   dbConection,
@@ -36,7 +20,8 @@ import {
   rateLimit,
   fastifyMetrics,
   underPressureFastify,
-  corsFastify
+  corsFastify,
+  compressFastify
 } from "./src/config"
 
 viewEJS(server);
@@ -49,19 +34,19 @@ helmet(server);
 fastifyMetrics(server);
 corsFastify(server);
 underPressureFastify(server);
+compressFastify(server);
 
 // routers
 import { healthcheck } from "./src/routers"
 server.register(healthcheck, { prefix: '/' })
 
-
 import tack from "./src/tasks"
 
-const start = async () => {
+(async () => {
 
   try {
     const port = Number(PORT) || 3500
-    let dbStatus = await dbConection() || "";
+    const dbStatus = await dbConection() || "";
     await server.listen({ port, host: '0.0.0.0' });
 
     const table = new Table({
@@ -79,15 +64,10 @@ const start = async () => {
       ["db estatus", colors.cyan(dbStatus)]
     );
 
-    // Imprimir la tabla
     console.log(table.toString());
   } catch (err) {
-    server.log.error(err)
     console.log(err)
-    process.exit(1)
   }
-}
-
-start()
+})();
 
 export default server;
