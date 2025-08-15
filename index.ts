@@ -155,16 +155,9 @@ server.register(fastifyExpress).after(() => {
 });
 
 
-import fastifyView from '@fastify/view';
-import ejs from 'ejs';
+import { viewEJS } from "./src/config"
 
-server.register(fastifyView, {
-  engine: {
-    ejs
-  },
-  root: path.join(__dirname, 'src', 'views'),
-  viewExt: 'ejs',
-});
+viewEJS(server);
 
 
 // servir archivos estáticos

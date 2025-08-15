@@ -8,11 +8,9 @@ const verificarToken = async (token: string) => {
     try {
         const payload = jwt.verify(token, JWTSECRETO) as JwtPayload | undefined;
 
-        const isAuthenticated = { isAuthenticated: false }
-
         if (!payload || !payload.id) {
             console.error("Token inválido o sin ID");
-            return { payload, isAuthenticated };
+            return { payload, isAuthenticated: false };
         }
 
         const usuario = await prisma.usuario.findUnique({
@@ -21,10 +19,10 @@ const verificarToken = async (token: string) => {
 
         if (!usuario) {
             console.error("Usuario no encontrado");
-            return { payload, isAuthenticated };
+            return { payload, isAuthenticated: false };
         }
 
-        return { ...usuario, ...isAuthenticated };
+        return { ...usuario, isAuthenticated: true };
     } catch (err) {
         console.error("Error al verificar el token:", err);
         return errorResponse({ message: "Error al verificar el token" });

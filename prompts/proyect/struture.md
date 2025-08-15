@@ -61,11 +61,7 @@
 │   └── views
 │       └── healthcheck
 │           └── index.ejs
-├── .dockerignore
 ├── .env
-├── .gitignore
-├── docker-compose.yaml
-├── dockerfile
 ├── index.ts
 ├── package-lock.json
 ├── package.json
