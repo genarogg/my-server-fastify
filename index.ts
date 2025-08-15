@@ -3,15 +3,9 @@ import clear from "console-clear";
 clear();
 
 import Fastify, { FastifyInstance } from 'fastify'
-import path from 'path';
+
 import Table from 'cli-table3';
 import colors from "colors";
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 import 'dotenv/config';
 const { PORT } = process.env;
@@ -24,30 +18,6 @@ server.register(cors, {
   origin: '*',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-});
-
-// configurar helmet
-import helmet from '@fastify/helmet';
-server.register(helmet, {
-  global: true,
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false,
-  frameguard: { action: 'deny' },
-  hidePoweredBy: true,
-});
-
-// Configura  @fastify/rate-limit
-import rateLimit from '@fastify/rate-limit';
-server.register(rateLimit, {
-  max: 100,
-  timeWindow: '1 minute',
-  errorResponseBuilder: (req, context) => {
-    return {
-      code: 429,
-      error: 'Too Many Requests',
-      message: 'Has alcanzado el límite de solicitudes. Por favor, inténtalo de nuevo más tarde.'
-    }
-  }
 });
 
 import underPressure from '@fastify/under-pressure';
@@ -69,30 +39,6 @@ server.register(slowDown, {
 import compress from '@fastify/compress';
 server.register(compress, { global: true });
 
-// Configurar caching
-import fastifyCaching from '@fastify/caching';
-server.register(fastifyCaching, {
-  privacy: fastifyCaching.privacy.PUBLIC,
-  expiresIn: 3600
-});
-
-// Configurar Swagger
-import fastifySwagger from '@fastify/swagger';
-import fastifySwaggerUi from '@fastify/swagger-ui';
-
-server.register(fastifySwagger, {
-  mode: 'static',
-  specification: {
-    path: path.join(process.cwd(), 'public', 'docs', 'swagger.yaml'),
-    baseDir: process.cwd(),
-  },
-});
-
-server.register(fastifySwaggerUi, {
-  routePrefix: '/docs',
-  staticCSP: true,
-  transformStaticCSP: (header) => header,
-});
 
 // Configurar metrics
 import fastifyMetrics from 'fastify-metrics';
@@ -100,23 +46,25 @@ server.register(fastifyMetrics, {
   endpoint: '/metrics'
 });
 
-// db conection
-import dbConection from "./src/config/db-conection";
-let dbStatus: any;
+import {
+  dbConection,
+  viewEJS,
+  staticFiles,
+  graphql,
+  caching,
+  swagger,
+  helmet,
+  rateLimit
+} from "./src/config"
 
 
-// Registrar @fastify/express
-
-
-
-import { viewEJS, staticFiles } from "./src/config"
 viewEJS(server);
 staticFiles(server);
-
-
-// servir archivos estáticos
-
-
+graphql(server);
+caching(server)
+swagger(server);
+rateLimit(server);
+helmet(server);
 
 // routers
 import { healthcheck } from "./src/routers"
@@ -134,7 +82,7 @@ const start = async () => {
 
   try {
     const port = Number(PORT) || 3500
-    dbStatus = await dbConection();
+    let dbStatus = await dbConection() || "";
     await server.listen({ port, host: '0.0.0.0' });
 
     const table = new Table({
