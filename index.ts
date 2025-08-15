@@ -106,69 +106,16 @@ let dbStatus: any;
 
 
 // Registrar @fastify/express
-import fastifyExpress from '@fastify/express';
-import express from 'express';
-
-import { ApolloServer } from "@apollo/server";
-
-import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-
-import bodyParser from "body-parser";
-import { processRequest } from "graphql-upload-minimal";
-import { schema, resolvers } from "./src/graphql"
-
-server.register(fastifyExpress).after(() => {
-  const app = express();
-
-  const apolloServer = new ApolloServer({
-    typeDefs: schema,
-    resolvers,
-    introspection: true,
-    csrfPrevention: false,
-    plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
-  });
-
-  apolloServer.start().then(() => {
-    app.use(
-      "/graphql",
-      async (req, res, next) => {
-        if (
-          req.method === "POST" &&
-          req.headers["content-type"] &&
-          req.headers["content-type"].includes("multipart/form-data")
-        ) {
-          try {
-            req.body = await processRequest(req, res);
-          } catch (error) {
-            return next(error);
-          }
-        }
-        next();
-      },
-      bodyParser.json(),
-      expressMiddleware(apolloServer)
-    );
-
-    server.use(app);
-  });
-});
 
 
-import { viewEJS } from "./src/config"
 
+import { viewEJS, staticFiles } from "./src/config"
 viewEJS(server);
+staticFiles(server);
 
 
 // servir archivos estáticos
-import fastifyStatic from '@fastify/static';
-server.register(fastifyStatic, {
-  root: path.join(__dirname, "public"),
-  prefix: '/',
-  cacheControl: true,
-  maxAge: 86400000,
-  etag: true
-});
+
 
 
 // routers
