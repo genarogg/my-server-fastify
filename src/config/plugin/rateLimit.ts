@@ -2,7 +2,6 @@ import type { FastifyInstance } from "fastify"
 import rateLimit from '@fastify/rate-limit';
 
 const rateLimite = (server: FastifyInstance) => {
-
     return server.register(rateLimit, {
         max: 100,
         timeWindow: '1 minute',
@@ -14,7 +13,6 @@ const rateLimite = (server: FastifyInstance) => {
             }
         }
     });
-
 }
 
 export default rateLimite;
