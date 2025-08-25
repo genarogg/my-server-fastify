@@ -56,10 +56,8 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "react-pdf-levelup": "^3.1.51",
-    "serverless-http": "^3.2.0",
     "ts-node-dev": "^2.0.0",
-    "tsc-alias": "^1.8.11",
-    "tsx": "^4.20.3"
+    "tsc-alias": "^1.8.11"
   },
   "devDependencies": {
     "@swc/cli": "^0.7.3",
@@ -79,6 +77,7 @@
     "prisma": "^6.13.0",
     "rimraf": "^6.0.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "tsx": "^4.20.3"
   }
 }
