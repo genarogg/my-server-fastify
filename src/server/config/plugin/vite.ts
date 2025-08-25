@@ -5,12 +5,17 @@ import { resolve } from "node:path";
 const vite = async (server: FastifyInstance, dev?: boolean) => {
 
     await server.register(FastifyVite, {
-        root: resolve(process.cwd(), "src"),
-        distDir: resolve(process.cwd(), "src", "client", 'build'),
+        root: resolve(process.cwd()),
+        distDir: resolve(process.cwd(), 'build'),
         dev: dev || process.argv.includes('--dev'),
         spa: true,
     })
-await server.vite.ready();
+
+    await server.vite.ready();
+
+    server.get('/', (req, reply) => {
+        return reply.html()
+    })
 
 };
 

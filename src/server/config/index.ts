@@ -10,7 +10,7 @@ import corsFastify from './plugin/corsFastify';
 import underPressureFastify from './plugin/underPressureFastify';
 import slowDownFastify from './plugin/slowDownFastify';
 import compressFastify from './plugin/compressFastify';
-import vite from '../vite';
+import vite from './plugin/vite';
 import dbConection from './db-conection';
 
 

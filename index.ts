@@ -28,7 +28,7 @@ import {
 const registerPlugins = async () => {
   await viewEJS(server);
   await staticFiles(server);
-  await graphql(server);
+  // await graphql(server);
   await caching(server)
   await swagger(server);
   await rateLimit(server);
@@ -37,12 +37,12 @@ const registerPlugins = async () => {
   await corsFastify(server);
   await underPressureFastify(server);
   await compressFastify(server);
-  await vite(server);
+  // await vite(server);
 }
 
 // routers
 import { healthcheck } from "./src/server/routers"
-server.register(healthcheck, { prefix: '/estadisticas' })
+server.register(healthcheck, { prefix: '/' })
 
 import tack from "./src/server/tasks"
 
