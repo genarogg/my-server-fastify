@@ -28,7 +28,7 @@ import {
 const registerPlugins = async () => {
   await viewEJS(server);
   await staticFiles(server);
-  // await graphql(server);
+  graphql(server);
   await caching(server)
   await swagger(server);
   await rateLimit(server);

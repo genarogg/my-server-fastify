@@ -1,57 +1,124 @@
-import fastifyExpress from '@fastify/express';
-import express from 'express';
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
+import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { ApolloServer } from '@apollo/server';
+import { fastifyApolloHandler } from '@as-integrations/fastify';
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import bodyParser from "body-parser";
-import { processRequest } from "graphql-upload-minimal";
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import depthLimit from "graphql-depth-limit";
-import { schema, resolvers } from "../../graphql";
-import type { FastifyInstance } from "fastify"
+import { processRequest } from "graphql-upload-minimal";
+import { schema, resolvers } from "../../graphql"; // Importar desde tus archivos separados
 
-const graphql = (server: FastifyInstance) => {
-
-    return server.register(fastifyExpress).after(() => {
-        const app = express();
-
-        const apolloServer = new ApolloServer({
-            typeDefs: schema,
-            resolvers,
-            introspection: true,
-            csrfPrevention: false,
-            validationRules: [
-                depthLimit(10) 
-            ],
-            plugins: [
-                ApolloServerPluginLandingPageLocalDefault({ embed: true })
-            ],
-        });
-
-        apolloServer.start().then(() => {
-            app.use(
-                "/graphql",
-                async (req, res, next) => {
-                    if (
-                        req.method === "POST" &&
-                        req.headers["content-type"] &&
-                        req.headers["content-type"].includes("multipart/form-data")
-                    ) {
-                        try {
-                            req.body = await processRequest(req, res);
-                        } catch (error) {
-                            return next(error);
-                        }
-                    }
-                    next();
-                },
-                bodyParser.json(),
-                expressMiddleware(apolloServer)
-            );
-
-            server.use(app);
-        });
-    });
-
+// Extender los tipos de FastifyRequest para incluir propiedades adicionales
+declare module 'fastify' {
+    interface FastifyRequest {
+        user?: any;
+    }
 }
 
-export default graphql;
+// Definir tipos para el contexto
+interface GraphQLContext {
+    req: FastifyRequest;
+    res: FastifyReply;
+    user?: any;
+}
+
+// Tipo para el contexto del handler de Apollo
+interface ApolloContextValue {
+    request: FastifyRequest;
+    reply: FastifyReply;
+}
+
+// Crear la instancia de Apollo Server con configuraciones avanzadas
+const createApolloServer = (server: FastifyInstance) => {
+    return new ApolloServer({
+        typeDefs: schema, // Usar el schema importado
+        resolvers,        // Usar los resolvers importados
+        introspection: true,
+        csrfPrevention: false,
+        validationRules: [
+            depthLimit(10) // Limitar profundidad de queries
+        ],
+        plugins: [
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            // Plugin para manejar el cierre limpio del servidor
+            ApolloServerPluginDrainHttpServer({ httpServer: server.server })
+        ],
+        // Manejo de errores personalizado
+        formatError: (formattedError, error) => {
+            // Log del error (puedes usar tu logger preferido)
+            console.error('GraphQL Error:', error);
+
+            // En desarrollo, mostrar más detalles
+            if (process.env.NODE_ENV === 'development') {
+                return formattedError;
+            }
+
+            // En producción, ocultar detalles internos
+            return {
+                message: formattedError.message,
+                code: formattedError.extensions?.code,
+                path: formattedError.path,
+            };
+        },
+    });
+};
+
+const apolloFastify = async (server: FastifyInstance) => {
+    // Crear la instancia de Apollo Server
+    const apollo = createApolloServer(server);
+
+    // Inicializar Apollo Server
+    await apollo.start();
+
+    // Registrar hook para procesar multipart/form-data (file uploads)
+    server.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
+        // Solo procesar uploads en la ruta GraphQL
+        if (request.url === '/graphql' || request.url.startsWith('/graphql?')) {
+            if (
+                request.method === 'POST' &&
+                request.headers['content-type'] &&
+                request.headers['content-type'].includes('multipart/form-data')
+            ) {
+                try {
+                    // Procesar upload de archivos usando casting seguro
+                    (request as any).body = await processRequest(request.raw, reply.raw);
+                } catch (error) {
+                    server.log.error('Error processing file upload:', error);
+                    await reply.code(400).send({
+                        error: 'Error processing file upload',
+                        details: process.env.NODE_ENV === 'development' ? String(error) : undefined
+                    });
+                    return;
+                }
+            }
+        }
+    });
+
+    // Registrar la ruta de GraphQL
+    server.route({
+        url: '/graphql',
+        method: ['GET', 'POST', 'OPTIONS'],
+        handler: fastifyApolloHandler(apollo, {
+            context: async (request: FastifyRequest): Promise<GraphQLContext> => {
+                return {
+                    req: request,
+                    res: request.reply, // si tienes acceso, o usa null
+                    user: request.user || null,
+                };
+            }
+        })
+    });
+
+    // Agregar ruta de salud para GraphQL
+    server.route({
+        method: 'GET',
+        url: '/graphql/health',
+        handler: async (request: FastifyRequest, reply: FastifyReply) => {
+            return { status: 'ok', service: 'graphql', timestamp: new Date().toISOString() };
+        }
+    });
+
+    server.log.info('Apollo GraphQL server configured successfully');
+    return server;
+};
+
+export default apolloFastify;
