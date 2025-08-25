@@ -21,30 +21,35 @@ import {
   fastifyMetrics,
   underPressureFastify,
   corsFastify,
-  compressFastify
+  compressFastify,
+  vite
 } from "./src/server/config"
 
-// viewEJS(server);
-staticFiles(server);
-graphql(server);
-caching(server)
-swagger(server);
-rateLimit(server);
-helmet(server);
-fastifyMetrics(server);
-corsFastify(server);
-underPressureFastify(server);
-compressFastify(server);
+const registerPlugins = async () => {
+  await viewEJS(server);
+  await staticFiles(server);
+  graphql(server);
+  await caching(server)
+  await swagger(server);
+  await rateLimit(server);
+  await helmet(server);
+  await fastifyMetrics(server);
+  await corsFastify(server);
+  await underPressureFastify(server);
+  await compressFastify(server);
+  await vite(server);
+}
 
 // routers
 import { healthcheck } from "./src/server/routers"
-server.register(healthcheck, { prefix: '/' })
+server.register(healthcheck, { prefix: '/estadisticas' })
 
 import tack from "./src/server/tasks"
 
 (async () => {
 
   try {
+    await registerPlugins()
     const port = Number(PORT) || 3500
     const dbStatus = await dbConection() || "";
     await server.listen({ port, host: '0.0.0.0' });
