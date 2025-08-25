@@ -4,7 +4,7 @@ import clear from "console-clear";
 import colors from "colors";
 import 'dotenv/config';
 
-// clear();
+clear();
 
 const { PORT } = process.env;
 const server: FastifyInstance = Fastify({})
@@ -37,12 +37,12 @@ const registerPlugins = async () => {
   await corsFastify(server);
   await underPressureFastify(server);
   await compressFastify(server);
-  // await vite(server);
+  await vite(server);
 }
 
 // routers
 import { healthcheck } from "./src/server/routers"
-server.register(healthcheck, { prefix: '/' })
+server.register(healthcheck, { prefix: '/estadisticas' })
 
 import tack from "./src/server/tasks"
 
