@@ -22,9 +22,9 @@ import {
   underPressureFastify,
   corsFastify,
   compressFastify
-} from "./src/config"
+} from "./src/server/config"
 
-viewEJS(server);
+// viewEJS(server);
 staticFiles(server);
 graphql(server);
 caching(server)
@@ -37,10 +37,10 @@ underPressureFastify(server);
 compressFastify(server);
 
 // routers
-import { healthcheck } from "./src/routers"
+import { healthcheck } from "./src/server/routers"
 server.register(healthcheck, { prefix: '/' })
 
-import tack from "./src/tasks"
+import tack from "./src/server/tasks"
 
 (async () => {
 

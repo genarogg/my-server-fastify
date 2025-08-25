@@ -1,4 +1,4 @@
-import { encriptarContrasena, prisma } from "@fn";
+import { encriptarContrasena, prisma } from "src/server/functions";
 import { Rol } from "@prisma/client";
 
 const seedUsers = async () => {

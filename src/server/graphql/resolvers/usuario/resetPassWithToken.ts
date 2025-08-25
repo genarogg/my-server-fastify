@@ -1,5 +1,5 @@
 
-import { prisma, verificarToken, successResponse, errorResponse, crearBitacora, encriptarContrasena, generarToken } from '@fn';
+import { prisma, verificarToken, successResponse, errorResponse, crearBitacora, encriptarContrasena, generarToken } from 'src/server/functions';
 
 import { AccionesBitacora } from "@prisma/client";
 
