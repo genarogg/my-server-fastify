@@ -10,8 +10,10 @@ import corsFastify from './plugin/corsFastify';
 import underPressureFastify from './plugin/underPressureFastify';
 import slowDownFastify from './plugin/slowDownFastify';
 import compressFastify from './plugin/compressFastify';
-
+import vite from '../vite';
 import dbConection from './db-conection';
+
+
 
 export {
     staticFiles,
@@ -26,5 +28,6 @@ export {
     underPressureFastify,
     slowDownFastify,
     compressFastify,
+    vite,
     dbConection,
 }

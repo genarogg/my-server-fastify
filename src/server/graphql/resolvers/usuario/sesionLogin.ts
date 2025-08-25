@@ -6,7 +6,7 @@ import {
     generarToken,
     compararContrasena,
     validarCapchat
-} from "@fn";
+} from "src/server/functions";
 
 import { AccionesBitacora } from "@prisma/client";
 

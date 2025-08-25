@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { log } from "@fn";
+import { log } from "src/server/functions";
 
 const dbConection = async () => {
     const prisma = new PrismaClient();

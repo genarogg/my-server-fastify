@@ -14,7 +14,7 @@
     "paths": {
       "@env": ["./env.ts"],
       "@/*": ["./src/client/*"],
-      "@fn": ["./src/functions"]
+      "@fn": ["src/server/functions"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

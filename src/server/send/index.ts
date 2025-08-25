@@ -1,4 +1,4 @@
-import { prisma, log } from "@fn";
+import { prisma, log } from "src/server/functions";
 import seedUsers from "./seedUsers";
 
 

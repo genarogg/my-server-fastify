@@ -3,7 +3,7 @@ import {
     errorResponse,
     prisma,
     verificarToken
-} from "@fn";
+} from "src/server/functions";
 import { Rol } from "@prisma/client";
 
 interface ObtenerUsuariosArgs {
