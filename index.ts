@@ -4,7 +4,7 @@ import clear from "console-clear";
 import colors from "colors";
 import 'dotenv/config';
 
-// clear();
+clear();
 
 const { PORT } = process.env;
 const server: FastifyInstance = Fastify({})
@@ -26,23 +26,24 @@ import {
 } from "./src/server/config"
 
 const registerPlugins = async () => {
-  await viewEJS(server);
-  await staticFiles(server);
-  // await graphql(server);
-  await caching(server)
-  await swagger(server);
-  await rateLimit(server);
-  await helmet(server);
-  await fastifyMetrics(server);
-  await corsFastify(server);
-  await underPressureFastify(server);
-  await compressFastify(server);
-  // await vite(server);
+  await graphql(server);
+  await vite(server);
+  // await viewEJS(server);
+  // await staticFiles(server);
+  // await caching(server)
+  // await swagger(server);
+  // await rateLimit(server);
+  // await helmet(server);
+  // await fastifyMetrics(server);
+  // await corsFastify(server);
+  // await underPressureFastify(server);
+  // await compressFastify(server);
+
 }
 
 // routers
-import { healthcheck } from "./src/server/routers"
-server.register(healthcheck, { prefix: '/' })
+// import { healthcheck } from "./src/server/routers"
+// server.register(healthcheck, { prefix: '/sa' })
 
 import tack from "./src/server/tasks"
 
