@@ -1,4 +1,4 @@
-import { renderToStream } from "react-pdf-levelup";
+import { renderToStream } from "@react-pdf/renderer";
 import * as templates from "../../../pdf";
 import { createElement } from "react";
 

@@ -5,39 +5,45 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import depthLimit from "graphql-depth-limit";
 import { processRequest } from "graphql-upload-minimal";
-import { schema, resolvers } from "../../graphql";
+import { schema, resolvers } from "../../graphql"; // Importar desde tus archivos separados
 
+// Extender los tipos de FastifyRequest para incluir propiedades adicionales
 declare module "fastify" {
     interface FastifyRequest {
         user?: any;
     }
 }
 
+// Definir tipos para el contexto
 interface GraphQLContext {
     req: FastifyRequest;
     user?: any;
 }
 
+// Crear la instancia de Apollo Server con configuraciones avanzadas
 const createApolloServer = (server: FastifyInstance) => {
     return new ApolloServer({
-        typeDefs: schema, 
-        resolvers, 
+        typeDefs: schema, // Usar el schema importado
+        resolvers, // Usar los resolvers importados
         introspection: true,
         csrfPrevention: false,
-        validationRules: [depthLimit(10)],
+        validationRules: [depthLimit(10)], // Limitar profundidad de queries
         plugins: [
             ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            // Plugin para manejar el cierre limpio del servidor
             ApolloServerPluginDrainHttpServer({ httpServer: server.server }),
         ],
-
+        // Manejo de errores personalizado
         formatError: (formattedError, error) => {
-
+            // Log del error (puedes usar tu logger preferido)
             console.error("GraphQL Error:", error);
 
+            // En desarrollo, mostrar más detalles
             if (process.env.NODE_ENV === "development") {
                 return formattedError;
             }
 
+            // En producción, ocultar detalles internos
             return {
                 message: formattedError.message,
                 code: formattedError.extensions?.code,
@@ -48,7 +54,7 @@ const createApolloServer = (server: FastifyInstance) => {
 };
 
 const apolloFastify = async (server: FastifyInstance) => {
-
+    // Crear la instancia de Apollo Server
     const apollo = createApolloServer(server);
 
     // Inicializar Apollo Server
@@ -58,6 +64,7 @@ const apolloFastify = async (server: FastifyInstance) => {
     server.addHook(
         "preHandler",
         async (request: FastifyRequest, reply: FastifyReply) => {
+            // Solo procesar uploads en la ruta GraphQL
             if (request.url === "/graphql" || request.url.startsWith("/graphql?")) {
                 if (
                     request.method === "POST" &&

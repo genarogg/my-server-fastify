@@ -6,10 +6,12 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
+    
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ],
+
     "baseUrl": "./",
     "paths": {
       "@env": ["./env.ts"],

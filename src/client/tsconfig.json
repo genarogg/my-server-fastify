@@ -1,3 +1,4 @@
+
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
@@ -8,8 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,    
-    "target": "ES2023",
-    "types": ["vite/client"]
+    "target": "ES2023"
   },
   "include": ["**/*"],
   "exclude": []
