@@ -21,7 +21,7 @@ import {
   underPressureFastify,
   corsFastify,
   compressFastify,
-  vite
+  reactView
 } from "./src/server/config"
 
 const registerPlugins = async () => {
@@ -36,7 +36,7 @@ const registerPlugins = async () => {
   await corsFastify(server);
   await underPressureFastify(server);
   await compressFastify(server);
-  await vite(server);
+  await reactView(server);
 }
 
 // routers

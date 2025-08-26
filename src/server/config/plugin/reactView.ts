@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import FastifyVite from "@fastify/vite";
 import { resolve } from "node:path";
 
-const vite = async (server: FastifyInstance, dev?: boolean) => {
+const reactView = async (server: FastifyInstance, dev?: boolean) => {
 
     await server.register(FastifyVite, {
         root: resolve(process.cwd()),
@@ -19,4 +19,4 @@ const vite = async (server: FastifyInstance, dev?: boolean) => {
 
 };
 
-export default vite;
+export default reactView;
