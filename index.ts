@@ -18,7 +18,7 @@ import {
   helmet,
   rateLimit,
   fastifyMetrics,
-  underPressureFastify,
+  // underPressureFastify,
   corsFastify,
   compressFastify,
   reactView
@@ -32,9 +32,9 @@ const registerPlugins = async () => {
   // swagger(server);
   await rateLimit(server);
   await helmet(server);
-  await fastifyMetrics(server);
+  // await fastifyMetrics(server);
   await corsFastify(server);
-  await underPressureFastify(server);
+  // await underPressureFastify(server);
   await compressFastify(server);
   await reactView(server);
 }
