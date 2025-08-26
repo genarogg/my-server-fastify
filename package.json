@@ -10,7 +10,9 @@
     "prisma": "npx prisma generate && npx prisma migrate dev",
     "clean": "rimraf dist",
     "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",
-    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
+    "build:client": "rimraf dist/src/client && vite build",
     "production": "npm run build && npm run start"
   },
   "keywords": [],

@@ -16,7 +16,7 @@ const Component = ({ data }:any) => {
   };
 
   return (
-    <LayoutPDF footer={<Footer />}>
+    <LayoutPDF footer={<Footer />} pagination={true}>
       <P>
         Lorem ipsum acts as a stand-in for actual text when the final content is
         not yet available. This allows designers to focus on layout and visual

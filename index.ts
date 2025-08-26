@@ -46,7 +46,7 @@ server.register(healthcheck, { prefix: '/estadisticas' })
 import tack from "./src/server/tasks"
 
 (async () => {
-  clear();
+  // clear();
   try {
     await registerPlugins()
     const port = Number(PORT) || 3500
