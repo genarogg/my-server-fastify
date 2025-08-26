@@ -17,6 +17,10 @@ const reactView = async (server: FastifyInstance) => {
         return reply.html()
     })
 
+    server.get('/headcheck', (req, reply) => {
+        return reply.html()
+    })
+
 };
 
 export default reactView;

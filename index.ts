@@ -25,17 +25,17 @@ import {
 } from "./src/server/config"
 
 const registerPlugins = async () => {
-  await viewEJS(server);
-  await staticFiles(server);
-  graphql(server);
-  await caching(server)
+  // await viewEJS(server);
+  // await staticFiles(server);
+  // graphql(server);
+  // await caching(server)
   // swagger(server);
-  await rateLimit(server);
-  await helmet(server);
-  await fastifyMetrics(server);
-  await corsFastify(server);
+  // await rateLimit(server);
+  // await helmet(server);
+  // await fastifyMetrics(server);
+  // await corsFastify(server);
   // await underPressureFastify(server);
-  await compressFastify(server);
+  // await compressFastify(server);
   await reactView(server);
 }
 

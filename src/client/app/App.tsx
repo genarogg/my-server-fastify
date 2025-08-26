@@ -5,6 +5,7 @@ import { ExternalLink, Server, Database, FileText, Zap } from "lucide-react"
 import reactLogo from "../img/vite/react.svg"
 import viteLogo from "../img/vite/vite.svg"
 import isotipo from "../img/isotipo.svg"
+import "../css/app.css"
 
 function App() {
   const [count, setCount] = useState(0)
