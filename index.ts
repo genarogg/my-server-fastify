@@ -4,7 +4,6 @@ import clear from "console-clear";
 import colors from "colors";
 import 'dotenv/config';
 
-clear();
 
 const { PORT } = process.env;
 const server: FastifyInstance = Fastify({})
@@ -30,7 +29,7 @@ const registerPlugins = async () => {
   await staticFiles(server);
   graphql(server);
   await caching(server)
-  await swagger(server);
+  swagger(server);
   await rateLimit(server);
   await helmet(server);
   await fastifyMetrics(server);
@@ -47,7 +46,7 @@ server.register(healthcheck, { prefix: '/estadisticas' })
 import tack from "./src/server/tasks"
 
 (async () => {
-
+  clear();
   try {
     await registerPlugins()
     const port = Number(PORT) || 3500
