@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify"
 import { register } from "prom-client"
-import { successResponse, errorResponse } from "src/server/functions"
+import { successResponse } from "@fn"
 
 const parsePrometheusMetrics = (metrics: string) => {
     const parsedMetrics: Record<string, any> = {}
@@ -44,9 +44,10 @@ const parsePrometheusMetrics = (metrics: string) => {
 
 const healthcheck = (server: FastifyInstance) => {
 
-    server.post("/", async (request, reply) => {
+    server.get("/a", async (request, reply) => {
         try {
             const metrics = await register.metrics()
+            console.log(metrics)
             const parsedMetrics = parsePrometheusMetrics(metrics)
 
 

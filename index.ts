@@ -29,7 +29,7 @@ const registerPlugins = async () => {
   await staticFiles(server);
   graphql(server);
   await caching(server)
-  swagger(server);
+  // swagger(server);
   await rateLimit(server);
   await helmet(server);
   await fastifyMetrics(server);
@@ -41,7 +41,7 @@ const registerPlugins = async () => {
 
 // routers
 import { healthcheck } from "./src/server/routers"
-server.register(healthcheck, { prefix: '/asdads' })
+server.register(healthcheck, { prefix: '/v' })
 
 import tack from "./src/server/tasks"
 
