@@ -6,7 +6,7 @@ const reactView = async (server: FastifyInstance, dev?: boolean) => {
 
     await server.register(FastifyVite, {
         root: resolve(process.cwd()),
-        distDir: resolve(process.cwd(), 'build'),
+        distDir: resolve(process.cwd(), 'dist', "src"),
         dev: dev || process.argv.includes('--dev'),
         spa: true,
     })

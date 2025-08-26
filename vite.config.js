@@ -10,6 +10,6 @@ export default {
   ],
   build: {
     emptyOutDir: true,
-    outDir: resolve(process.cwd(), 'build'),
+    outDir: resolve(process.cwd(), 'dist',"src"),
   },
 }
