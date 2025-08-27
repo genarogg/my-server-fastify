@@ -14,10 +14,8 @@ import {
   staticFiles,
   graphql,
   caching,
-  swagger,
   helmet,
   rateLimit,
-  fastifyMetrics,
   underPressureFastify,
   corsFastify,
   compressFastify,
@@ -25,17 +23,16 @@ import {
 } from "./src/server/config"
 
 const registerPlugins = async () => {
-  // await viewEJS(server);
-  // await staticFiles(server);
-  // graphql(server);
-  // await caching(server)
-  // swagger(server);
-  // await rateLimit(server);
-  // await helmet(server);
-  // await fastifyMetrics(server);
-  // await corsFastify(server);
-  // await underPressureFastify(server);
-  // await compressFastify(server);
+  await viewEJS(server);
+  await staticFiles(server);
+  graphql(server);
+  await caching(server)
+  await rateLimit(server);
+  await helmet(server);
+
+  await corsFastify(server);
+  await underPressureFastify(server);
+  await compressFastify(server);
   await reactView(server);
 }
 
@@ -46,7 +43,7 @@ server.register(healthcheck, { prefix: '/v' })
 import tack from "./src/server/tasks"
 
 (async () => {
-  // clear();
+  clear();
   try {
     await registerPlugins()
     const port = Number(PORT) || 3500
