@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot index.ts",
-    "start": "bun dist/index.js",
+    "start": "node dist/index.js",
     "devs": "npm run prisma && npm run dev",
     "prisma": "npx prisma generate && npx prisma migrate dev",
     "clean": "rimraf dist",
