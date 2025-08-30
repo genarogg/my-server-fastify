@@ -5,7 +5,7 @@ import colors from "colors";
 import 'dotenv/config';
 
 const { PORT } = process.env;
-const server: FastifyInstance = Fastify({})
+const server: FastifyInstance = Fastify({ logger: true})
 
 import {
   dbConection,
