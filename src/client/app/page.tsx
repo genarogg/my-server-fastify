@@ -14,21 +14,21 @@ function App() {
   const services = [
     {
       name: "Servidor",
-      url: `${window.location.origin.replace(window.location.port, "5500")}`,
+      url: `/`,
       icon: Server,
       status: "active",
       description: "Servidor principal ejecutándose"
     },
     {
       name: "GraphQL",
-      url: `${window.location.origin.replace(window.location.port, "5500")}/graphql`,
+      url: `/graphql`,
       icon: Zap,
       status: "active",
       description: "API GraphQL disponible"
     },
     {
       name: "Documentación",
-      url: `${window.location.origin.replace(window.location.port, "5500")}/docs`,
+      url: `/docs`,
       icon: FileText,
       status: "active",
       description: "Documentación de la API"
