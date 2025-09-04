@@ -5,7 +5,7 @@ import colors from "colors";
 import 'dotenv/config';
 
 const { PORT } = process.env;
-const server: FastifyInstance = Fastify({ logger: true})
+const server: FastifyInstance = Fastify()
 
 import {
   dbConection,
@@ -18,31 +18,45 @@ import {
   underPressureFastify,
   corsFastify,
   compressFastify,
-  reactView
+  reactView,
+  multipart
 } from "./src/server/config"
 
 const registerPlugins = async () => {
+  // Plugins de configuración básica primero
+  await helmet(server);
+  await corsFastify(server);
+  await compressFastify(server);
+
+  // Plugins de parsing
+  await multipart(server);
+
+  // Plugins de vista y archivos estáticos
   await viewEJS(server);
   await staticFiles(server);
-  graphql(server);
-  await corsFastify(server);
   await reactView(server);
 
+  // Plugins de funcionalidad
+  await graphql(server);
+
+  // Plugins de rendimiento (en producción)
   if (process.env.NODE_ENV === "production") {
     await underPressureFastify(server);
-    await caching(server)
+    await caching(server);
     await rateLimit(server);
-    await helmet(server);
-    await compressFastify(server);
   }
 }
 
 import tack from "./src/server/tasks"
+import router from 'src/server/routers';
+
+
 
 (async () => {
   clear();
   try {
     await registerPlugins()
+    server.register(router, { prefix: '/api' })
     const port = Number(PORT) || 3500
     const dbStatus = await dbConection() || "";
     await server.listen({ port, host: '0.0.0.0' });
@@ -58,6 +72,7 @@ import tack from "./src/server/tasks"
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],
       ['Graphql', colors.green(`http://localhost:${PORT}/graphql`)],
+      ["Rest API", colors.green(`http://localhost:${PORT}/api`)],
       ['Documentacion', colors.cyan(`http://localhost:${PORT}/docs`)],
       ["db estatus", colors.cyan(dbStatus)]
     );

@@ -1,5 +1,12 @@
-import healthcheck from "./healthcheck";
+import { FastifyInstance } from 'fastify';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 
-export {
-    healthcheck
+const controller = (request: FastifyRequest, reply: FastifyReply) => {
+    return reply.send({ message: 'Hola mundo' });
 }
+
+const router = async (fastify: FastifyInstance) => {
+    fastify.get('/', controller);
+}
+
+export default router;
